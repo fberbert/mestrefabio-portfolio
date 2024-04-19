@@ -1,7 +1,7 @@
 import React from "react";
 import { SiPhp } from "react-icons/si";
 import { LuRouter } from "react-icons/lu";
-import { FaLinux, FaCode, FaReact, FaAmazon, FaRegFlag } from "react-icons/fa";
+import { FaLinux, FaCode, FaReact, FaAmazon } from "react-icons/fa";
 import vivaolinuxImg from "@/public/img/projects/vivaolinux.jpg";
 import automatizandoImg from "@/public/img/projects/automatizando.jpg";
 import whereisluizaImg from "@/public/img/projects/whereisluiza.jpg";
@@ -63,7 +63,7 @@ export const experiencesData = [
   },
   {
     title: "Freelancer developer",
-    location: React.createElement(FaRegFlag),
+    location: "",
     description:
       "I have worked as a freelancer developer for several companies and projects.",
     icon: React.createElement(FaCode),

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { FaRegCheckSquare } from "react-icons/fa";
 import SectionHeading from "./section-heading";
 import { motion } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
@@ -26,34 +27,41 @@ export default function About() {
 
       <p className="mb-1">Key Creations and Contributions:</p>
 
-      <ul className="mb-3 ml-9 list-disc">
-        <li>
+      <ul className="sm:mb-3 sm:ml-9 list-none border-4 border-gray-400 dark:border-gray-900 rounded-md">
+        <li className="bg-gray-400 dark:bg-gray-900 p-4">
+          <FaRegCheckSquare className="inline mr-2" />
           {" "}
           Founder of <a target="_blank" href="https://vivaolinux.com.br" className="underline">Viva o Linux</a> - A renowned website in the Linux community.
         </li>
 
-        <li>
+        <li className="p-4">
+          <FaRegCheckSquare className="inline mr-2" />
           {" "}
           <a target="_blank" href="https://automatizando.dev" className="underline">Automatizando.dev</a> - A hub for my innovations in home automation and AI.
         </li>
-        <li>
+        <li className="bg-gray-400 dark:bg-gray-900 p-4">
+          <FaRegCheckSquare className="inline mr-2" />
           {" "}
           Inventor of <a target="_blank" href="https://automatizando.dev/brinquedo" className="underline">Talking Toy</a> - An interactive toy integrating Alexa skills and AI.
         </li>
-        <li>
+        <li className="p-4">
+          <FaRegCheckSquare className="inline mr-2" />
           {" "}
           Developer of <a target="_blank" href="https://automatizando.dev/garagem" className="underline">Abrir Garagem</a> - A smart solution for garage door automation.
         </li>
-        <li>
+        <li className="bg-gray-400 dark:bg-gray-900 p-4">
+          <FaRegCheckSquare className="inline mr-2" />
           {" "}
           Instagram Content Creator: <a target="_blank" href="https://instagram.com/alexabolada" className="underline">@alexabolada</a> - Sharing insights and developments in AI and home automation.
         </li>
-        <li>
+        <li className="p-4">
+          <FaRegCheckSquare className="inline mr-2" />
           {" "}
           Expert in Cryptocurrency: Active in the field since 2016, with a focus
           on emerging technologies.
         </li>
-        <li>
+        <li className="bg-gray-400 dark:bg-gray-900 p-4">
+          <FaRegCheckSquare className="inline mr-2" />
           {" "}
           Free Software Community Contributor: Since 2002, contributing to
           various open-source projects.
