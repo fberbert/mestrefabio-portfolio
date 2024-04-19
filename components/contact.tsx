@@ -50,6 +50,9 @@ export default function Contact() {
           }
 
           toast.success("Email sent successfully!");
+          // clear form fields
+          const form = document.querySelector("form");
+          if (form) form.reset();
         }}
       >
         <input
