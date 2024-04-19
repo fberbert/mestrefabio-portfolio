@@ -31,10 +31,10 @@ export default function Project({
       }}
       className="group mb-3 sm:mb-8 last:mb-0"
     >
-      <section className="bg-gray-100 max-w-[42rem] border border-black/5 rounded-lg overflow-hidden sm:pr-8 relative hover:bg-gray-200 transition sm:group-even:pl-8 dark:text-white dark:bg-white/10 dark:hover:bg-white/20">
+      <section className="bg-white max-w-[42rem] border border-black/5 rounded-lg overflow-hidden sm:pr-8 relative hover:bg-gray-100 transition sm:group-even:pl-8 dark:text-white dark:bg-white/10 dark:hover:bg-white/20">
         <div className="pt-4 pb-7 px-5 sm:pl-10 sm:pr-2 sm:pt-10 sm:max-w-[50%] flex flex-col h-full sm:group-even:ml-[18rem]">
           <h3 className="text-2xl font-semibold">{title}</h3>
-          <p className="mt-2 mb-4 leading-relaxed text-gray-900 dark:text-white/70">
+          <p className="mt-2 mb-4 leading-relaxed text-black dark:text-white/70">
             {description}
           </p>
           <ul className="flex flex-wrap mt-4 gap-2 sm:mt-auto justify-center sm:justify-start">
@@ -50,7 +50,7 @@ export default function Project({
           <div className="text-center p-4 mt-4 mb-1">
             <a
               href={url}
-              className="text-sm font-semibold hover:no-underline bg-blue-700 dark:bg-blue-900 px-4 py-2 rounded-full text-white dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-800 transition"
+              className="text-sm font-semibold hover:no-underline bg-blue-900 dark:bg-blue-900 px-4 py-2 rounded-full text-white dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-800 transition"
             >
               View project
             </a>
