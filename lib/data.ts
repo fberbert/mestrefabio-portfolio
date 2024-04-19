@@ -1,10 +1,13 @@
 import React from "react";
-import { CgWorkAlt } from "react-icons/cg";
-import { FaReact } from "react-icons/fa";
-import { LuGraduationCap } from "react-icons/lu";
-import corpcommentImg from "@/public/corpcomment.png";
-import rmtdevImg from "@/public/rmtdev.png";
-import wordanalyticsImg from "@/public/wordanalytics.png";
+import { SiPhp } from "react-icons/si";
+import { LuRouter } from "react-icons/lu";
+import { FaLinux, FaCode, FaReact, FaAmazon, FaRegFlag } from "react-icons/fa";
+import vivaolinuxImg from "@/public/img/projects/vivaolinux.jpg";
+import automatizandoImg from "@/public/img/projects/automatizando.jpg";
+import whereisluizaImg from "@/public/img/projects/whereisluiza.jpg";
+import bitcoinconverterImg from "@/public/img/projects/bitcoinconverter.jpg";
+import abrirgaragemImg from "@/public/img/projects/abrir-garagem.jpg";
+import brinquedofalanteImg from "@/public/img/projects/brinquedo-falante.png";
 
 export const links = [
   {
@@ -35,73 +38,129 @@ export const links = [
 
 export const experiencesData = [
   {
-    title: "Graduated bootcamp",
-    location: "Miami, FL",
+    title: "GNU/Linux System Administrator",
+    location: "LinuxSolutions - Rio de Janeiro, Brazil",
     description:
-      "I graduated after 6 months of studying. I immediately found a job as a front-end developer.",
-    icon: React.createElement(LuGraduationCap),
-    date: "2019",
+      "I obtained my LPI certificate 6 months before graduating and got my first job immediately.",
+    icon: React.createElement(FaLinux),
+    date: "2000 - 2001",
   },
   {
-    title: "Front-End Developer",
-    location: "Orlando, FL",
+    title: "Full-Stack Developer and DevOps",
+    location: "ISM - Rio de Janeiro, Brazil",
     description:
-      "I worked as a front-end developer for 2 years in 1 job and 1 year in another job. I also upskilled to the full stack.",
-    icon: React.createElement(CgWorkAlt),
-    date: "2019 - 2021",
+      "I worked as a full-stack developer and DevOps for the advanced support sector of the internet provider ISM.",
+    icon: React.createElement(LuRouter),
+    date: "2001 - 2004",
   },
   {
-    title: "Full-Stack Developer",
-    location: "Houston, TX",
+    title: "Full-Stack Developer and DevOps",
+    location: "Viva o Linux",
     description:
-      "I'm now a full-stack developer working as a freelancer. My stack includes React, Next.js, TypeScript, Tailwind, Prisma and MongoDB. I'm open to full-time opportunities.",
+      "I acted as a self-contracted individual in this project, which involved everything from the creation and maintenance of the website to the maintenance of the servers.",
+    icon: React.createElement(SiPhp),
+    date: "2002 - 2022",
+  },
+  {
+    title: "Freelancer developer",
+    location: React.createElement(FaRegFlag),
+    description:
+      "I have worked as a freelancer developer for several companies and projects.",
+    icon: React.createElement(FaCode),
+    date: "2004 - 2022",
+  },
+  {
+    title: "Full-Stack Developer and DevOps",
+    location: "Automatizando.dev",
+    description:
+      "I am the founder and full-stack developer of Automatizando.dev, a hub for my innovations in home automation and AI.",
     icon: React.createElement(FaReact),
-    date: "2021 - present",
+    date: "2022 - present",
+  },
+  {
+    title: "Amazon AWS Architect",
+    location: "Aivis - Nova Friburgo, Brazil",
+    description:
+      "I am currently working as an Amazon AWS architect for the company Aivis.",
+    icon: React.createElement(FaAmazon),
+    date: "2024 - present",
   },
 ] as const;
 
 export const projectsData = [
   {
-    title: "CorpComment",
+    title: "Viva o Linux",
     description:
-      "I worked as a full-stack developer on this startup project for 2 years. Users can give public feedback to companies.",
-    tags: ["React", "Next.js", "MongoDB", "Tailwind", "Prisma"],
-    imageUrl: corpcommentImg,
+      "I founded this renowned website in 2002. Within over a decade, it became the largest Linux community in Brazil, featuring forums, articles, and code sharing.",
+    tags: ["PHP", "MySQL", "Linux", "Apache", "Nginx"],
+    imageUrl: vivaolinuxImg,
+    url: "https://www.vivaolinux.com.br",
   },
   {
-    title: "rmtDev",
+    title: "Automatizando.dev",
     description:
-      "Job board for remote developer jobs. I was the front-end developer. It has features like filtering, sorting and pagination.",
-    tags: ["React", "TypeScript", "Next.js", "Tailwind", "Redux"],
-    imageUrl: rmtdevImg,
+      "A hub for my innovations in home automation and AI, where I serve as the full-stack developer. It features EAD, a forum, and articles.",
+    tags: ["React", "TypeScript", "Next.js", "Tailwind", "MySQL"],
+    imageUrl: automatizandoImg,
+    url: "https://automatizando.dev",
   },
   {
-    title: "Word Analytics",
+    title: "Where is Luiza",
     description:
-      "A public web app for quick analytics on text. It shows word count, character count and social media post limits.",
-    tags: ["React", "Next.js", "SQL", "Tailwind", "Framer"],
-    imageUrl: wordanalyticsImg,
+      "A simple children's game for Android where the goal is to find where the character Luiza is.",
+    tags: ["React Native", "JavaScript", "Android"],
+    imageUrl: whereisluizaImg,
+    url: "https://play.google.com/store/apps/details?id=com.whereisluiza",
+  },
+  {
+    title: "Open Garage",
+    description:
+      "A web app that opens garage doors via a cloud-based API and IoT device, enabling remote access. It includes access logs, user management, and scheduling.",
+    tags: ["React", "Node.js", "Tuya", "Home Assistant", "MySQL"],
+    imageUrl: abrirgaragemImg,
+    url: "https://automatizando.dev/garagem",
+  },
+  {
+    title: "Talking Toy",
+    description:
+      "A talking plush toy enhanced with AI for interactive play, integrating a modified Alexa Echo Dot, portable battery, a web app for personality customization, and an API connecting to OpenAI's text engine.",
+    tags: ["React", "Node.js", "OpenAI", "Alexa Skills Kit"],
+    imageUrl: brinquedofalanteImg,
+    url: "https://automatizando.dev/brinquedo",
+  },
+  {
+    title: "Bitcoin Converter",
+    description:
+      "A simple Bitcoin converter that converts amounts of Bitcoin to USD and Brazilian Real, and vice versa.",
+    tags: ["React Native", "JavaScript", "Android"],
+    imageUrl: bitcoinconverterImg,
+    url: "https://play.google.com/store/apps/details?id=com.bitcoinconverter2",
   },
 ] as const;
 
 export const skillsData = [
   "HTML",
   "CSS",
+  "Linux",
   "JavaScript",
   "TypeScript",
   "React",
   "Next.js",
   "Node.js",
-  "Git",
-  "Tailwind",
-  "Prisma",
-  "MongoDB",
-  "Redux",
-  "GraphQL",
-  "Apollo",
   "Express",
-  "PostgreSQL",
   "Python",
-  "Django",
-  "Framer Motion",
+  "Git",
+  "Shell Scripting",
+  "Amazon Web Services",
+  "Artificial Intelligence",
+  "OpenAI",
+  "Tailwind",
+  "Bootstrap",
+  "Prisma",
+  "SQL",
+  "NoSQL",
+  "MongoDB",
+  "MySQL",
+  "PostgreSQL",
+  "Jest",
 ] as const;
