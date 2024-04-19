@@ -6,6 +6,10 @@ import { validateString, getErrorMessage } from "@/lib/utils";
 import ContactFormEmail from "@/email/contact-form-email";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
+/* create and .env.local file in the root of the project and add the following line:
+ * RESEND_API_KEY=your_api_key
+ * You can get your API key by signing up at https://resend.com
+ */
 
 export const sendEmail = async (formData: FormData) => {
   const senderEmail = formData.get("senderEmail");
@@ -27,8 +31,8 @@ export const sendEmail = async (formData: FormData) => {
   try {
     data = await resend.emails.send({
       from: "Contact Form <onboarding@resend.dev>",
-      to: "bytegrad@gmail.com",
-      subject: "Message from contact form",
+      to: "fberbert@gmail.com",
+      subject: "Contact from your portfolio website",
       reply_to: senderEmail,
       react: React.createElement(ContactFormEmail, {
         message: message,
