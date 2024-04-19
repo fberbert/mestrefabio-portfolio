@@ -18,6 +18,7 @@ export default function Footer() {
           href="https://github.com/fberbert/mestrefabio-portfolio"
           target="_blank"
           className="underline"
+          aria-label="GitHub repository"
         >
           GitHub repository
         </a>
