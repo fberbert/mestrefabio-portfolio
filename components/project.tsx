@@ -50,9 +50,9 @@ export default function Project({
           <div className="text-center p-4 mt-4 mb-1">
             <a
               href={url}
-              className="text-sm font-semibold hover:no-underline bg-blue-900 dark:bg-blue-900 px-4 py-2 rounded-full text-white dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-800 transition"
+              className="text-sm font-semibold hover:no-underline dark:bg-blue-900 px-4 py-2 rounded-md dark:text-blue-100 dark:hover:bg-blue-800 transition text-black"
             >
-              View project
+              Visit project
             </a>
           </div>
         </div>
