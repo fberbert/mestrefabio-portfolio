@@ -28,7 +28,12 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-gray-50 text-gray-950 relative pt-28 sm:pt-36 dark:bg-gray-900 dark:text-gray-50 dark:text-opacity-90`}
       >
-        <video autoPlay muted loop id="myVideo">
+        <video
+          autoPlay
+          muted
+          loop
+          className="fixed top-0 left-0 bottom-0 w-full h-full z-[-100] opacity-40 object-cover object-center"
+        >
           <source src="/code.mp4" type="video/mp4" />
         </video>
 
