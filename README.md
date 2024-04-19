@@ -19,6 +19,17 @@ This portfolio website is built with cutting-edge technologies, including:
 
 You are welcome to clone, copy, and use this code for your projects.
 
+## Screenshots
+
+![Intro section](https://imgur.com/Nj8njkY)
+
+![Projects section](https://imgur.com/K3cA8uu)
+
+![Experience section](https://imgur.com/6bRp5re)
+
+![Light mode theme](https://imgur.com/pVg8WHy)
+
+
 ## Setup
 
 To set up this project for personal use, follow these steps:
