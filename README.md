@@ -21,13 +21,13 @@ You are welcome to clone, copy, and use this code for your projects.
 
 ## Screenshots
 
-![Intro section](https://imgur.com/Nj8njkY)
+![Intro section](public/img/screens/intro.jpg "Intro section")
 
-![Projects section](https://imgur.com/K3cA8uu)
+![Projects section](public/img/screens/projects.jpg "Projects section")
 
-![Experience section](https://imgur.com/6bRp5re)
+![Experience section](public/img/screens/experience.jpg "Experience section")
 
-![Light mode theme](https://imgur.com/pVg8WHy)
+![Light mode theme](public/img/screens/light-mode.jpg "Light mode theme")
 
 
 ## Setup
