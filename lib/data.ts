@@ -8,6 +8,8 @@ import whereisluizaImg from "@/public/img/projects/whereisluiza.jpg";
 import bitcoinconverterImg from "@/public/img/projects/bitcoinconverter.jpg";
 import abrirgaragemImg from "@/public/img/projects/abrir-garagem.jpg";
 import brinquedofalanteImg from "@/public/img/projects/brinquedo-falante.png";
+import chatbotcasaImg from "@/public/img/projects/chatbot-casa.jpg";
+import monetalImg from "@/public/img/projects/monetal.jpg";
 
 export const links = [
   {
@@ -103,6 +105,22 @@ export const projectsData = [
     tags: ["React", "TypeScript", "Next.js", "Tailwind", "MySQL"],
     imageUrl: automatizandoImg,
     url: "https://automatizando.dev",
+  },
+  {
+    title: "Chatbot with my house",
+    description:
+      "A chatbot that controls the house using natural language, with integration with Home Assistant and OpenAI. You talk to the chatbot, and it decides which devices to turn on or off to improve your day.",
+    tags: ["Home Assistant", "OpenAI", "Node.js", "ChatGPT", "Twilio"],
+    imageUrl: chatbotcasaImg,
+    url: "https://www.instagram.com/p/C3X1r_yAx23/",
+  },
+  {
+    title: "Monetal",
+    description:
+      "A corporate website in Python/Django for a cryptocurrency consulting company.",
+    tags: ["Python", "Django", "Amazon AWS", "Bitcoin"],
+    imageUrl: monetalImg,
+    url: "https://monetal.com.br",
   },
   {
     title: "Where is Luiza",
