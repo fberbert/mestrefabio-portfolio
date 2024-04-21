@@ -23,16 +23,34 @@ const fadeInAnimationVariants = {
   }),
 };
 
+const shakeAnimationVariants = {
+  initial: {
+    opacity: 0,
+    x: 0,
+  },
+  animate: (index: number) => ({
+    opacity: 1,
+    x: [0, -10, 10, -10, 10, -5, 5, -2, 2, 0],
+    transition: {
+      delay: 0.05 * index,
+      duration: 0.5,
+      ease: "easeInOut",
+      // no repeat
+      repeat: 0,
+    },
+  }),
+};
+
 export default function SocialMediaBar() {
   return (
     <motion.ul className="flex justify-center gap-4 mt-4">
       {[1, 2, 3, 4, 5].map(index => (
         <motion.li
           key={index}
-          variants={fadeInAnimationVariants}
+          variants={shakeAnimationVariants}
+          custom={index}
           initial="initial"
           whileInView="animate"
-          custom={index}
           transition={{ delay: 0.05 * index }}
           viewport={{ once: false }}
         >

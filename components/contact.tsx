@@ -27,7 +27,7 @@ export default function Contact() {
         duration: 1,
       }}
       viewport={{
-        once: true,
+        once: false,
       }}
     >
       <SectionHeading>Contact me</SectionHeading>
