@@ -51,6 +51,7 @@ export default function Project({
             <a
               href={url}
               className="text-sm font-semibold hover:no-underline dark:bg-blue-900 px-4 py-2 rounded-md dark:text-blue-100 dark:hover:bg-blue-800 transition text-black"
+              target="_blank"
             >
               Visit project
             </a>

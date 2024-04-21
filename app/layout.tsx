@@ -2,6 +2,7 @@ import Header from "@/components/header";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import ActiveSectionContextProvider from "@/context/active-section-context";
+import BackgroundVideo from "@/components/background-video";
 import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll-to-top";
 import ThemeSwitch from "@/components/theme-switch";
@@ -28,20 +29,12 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-gray-50 text-gray-950 relative pt-28 sm:pt-36 dark:bg-gray-900 dark:text-gray-50 dark:text-opacity-90`}
       >
-        <video
-          autoPlay
-          muted
-          loop
-          className="fixed top-0 left-0 bottom-0 w-full h-full z-[-100] opacity-40 object-cover object-center"
-        >
-          <source src="/code.mp4" type="video/mp4" />
-        </video>
-
         <div className="bg-[#1B1A55] absolute top-[-6rem] -z-10 right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] dark:bg-[#070F2B]"></div>
         <div className="bg-[#9290C3] absolute top-[-1rem] -z-10 left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] dark:bg-[#535C91]"></div>
 
         <ThemeContextProvider>
           <ActiveSectionContextProvider>
+            <BackgroundVideo />
             <Header />
             {children}
             <Footer />

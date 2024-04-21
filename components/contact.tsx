@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
 import { sendEmail } from "@/actions/sendEmail";
 import SubmitBtn from "./submit-btn";
+import SocialMediaBar from "./social-media-bar";
 import toast from "react-hot-toast";
 
 export default function Contact() {
@@ -72,6 +73,13 @@ export default function Contact() {
         />
         <SubmitBtn />
       </form>
+
+      <p className="text-gray-700 dark:text-white/80 mt-4">
+        You can also reach me on social media:
+      </p>
+
+      <SocialMediaBar />
+
     </motion.section>
   );
 }
