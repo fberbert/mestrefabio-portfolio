@@ -7,7 +7,7 @@ import { motion } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
 
 export default function About() {
-  const { ref } = useSectionInView("About", 0.2);
+  const { ref } = useSectionInView("About", 0.5);
 
   return (
     <motion.section
@@ -19,7 +19,7 @@ export default function About() {
       id="about"
     >
       <SectionHeading>About me</SectionHeading>
-      <p className="mb-3">
+      <p className="mb-7 text-center sm:text-justify text-lg sm:text-2xl">
         Full Stack Engineer. Engaged to React/Next.JS, JavaScript, Artificial
         Inteligence, Shell Scripting, Python, Cryptocurrencies, Home Assistant
         and last but not least GNU/Linux!
