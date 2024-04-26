@@ -5,6 +5,7 @@ import { FaRegCheckSquare } from "react-icons/fa";
 import SectionHeading from "./section-heading";
 import { motion } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
+import MusicVideo from "./music-video";
 
 const fadeInAnimationVariants = {
   initial: {
@@ -54,7 +55,10 @@ export default function About() {
         and last but not least GNU/Linux!
       </p>
 
-      <p className="mb-1">Key Creations and Contributions:</p>
+      <p>I created a music video using AI to showcase my skills.</p>
+      <MusicVideo />
+
+      <p className="mt-4 mb-1">Key Creations and Contributions:</p>
 
       <ul className="sm:mb-3 sm:ml-9 list-none border-0 border-white border-opacity-60 dark:border-gray-900 rounded-md">
         <motion.li
