@@ -8,7 +8,7 @@ export default function BackgroundVideo() {
       loop
       className="fixed top-0 left-0 bottom-0 w-full h-full z-[-100] opacity-40 object-cover object-center"
     >
-      <source src="/code.mp4" type="video/mp4" />
+      <source src="/video/code.mp4" type="video/mp4" />
     </video>
   );
 }
