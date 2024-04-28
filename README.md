@@ -3,7 +3,7 @@
 ## About
 
 This portfolio website is built with cutting-edge technologies, including:
-- The latest features of Next.js 13
+- The latest features of Next.js 14
 - Next.js App Router and Server Actions
 - A mix of Client and Server Components
 - TypeScript for both beginners and intermediate developers
