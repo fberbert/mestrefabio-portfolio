@@ -5,12 +5,16 @@ import SectionHeading from "./section-heading";
 import { motion } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
 import { sendEmail } from "@/actions/sendEmail";
-import SubmitBtn from "./submit-btn";
 import SocialMediaBar from "./social-media-bar";
 import toast from "react-hot-toast";
+import { useLang } from "@/context/language-context";
+import { FaPaperPlane } from "react-icons/fa";
+import { useFormStatus } from "react-dom";
 
 export default function Contact() {
-  const { ref } = useSectionInView("Contact");
+  const { t } = useLang();
+  const { ref } = useSectionInView("#contact");
+  const { pending } = useFormStatus();
 
   return (
     <motion.section
@@ -30,15 +34,12 @@ export default function Contact() {
         once: false,
       }}
     >
-      <SectionHeading>Contact me</SectionHeading>
+      <SectionHeading>{t("section.contact")}</SectionHeading>
 
-      <p className="text-gray-700 -mt-6 dark:text-white/80">
-        Please contact me directly at{" "}
-        <a className="underline" href="mailto:sou@mestrefabio.com">
-          sou@mestrefabio.com
-        </a>{" "}
-        or through this form.
-      </p>
+      <p
+        className="text-gray-700 -mt-6 dark:text-white/80"
+        dangerouslySetInnerHTML={{ __html: t("contact.description") }}
+      />
 
       <form
         className="mt-10 flex flex-col dark:text-black"
@@ -62,24 +63,36 @@ export default function Contact() {
           type="email"
           required
           maxLength={500}
-          placeholder="Your email"
+          placeholder={t("contact.email")}
         />
         <textarea
           className="h-52 my-3 rounded-lg borderBlack p-4 dark:bg-white dark:bg-opacity-80 dark:focus:bg-opacity-100 transition-all dark:outline-none"
           name="message"
-          placeholder="Your message"
+          placeholder={t("contact.message")}
           required
           maxLength={5000}
         />
-        <SubmitBtn />
+        <button
+          type="submit"
+          className="group flex items-center justify-center gap-2 h-[3rem] w-auto bg-gray-900 text-white rounded-full outline-none transition-all focus:scale-110 hover:bg-gray-950 active:scale-105 dark:bg-white dark:bg-opacity-10 disabled:scale-100 disabled:bg-opacity-65 hover:bg-black dark:hover:bg-opacity-20"
+          disabled={pending}
+        >
+          {pending ? (
+            <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+          ) : (
+            <>
+              {t("contact.submit")}{" "}
+              <FaPaperPlane className="text-xs opacity-70 transition-all" />{" "}
+            </>
+          )}
+        </button>
       </form>
 
       <p className="text-gray-700 dark:text-white/80 mt-4">
-        You can also reach me on social media:
+        {t("contact.footer")}
       </p>
 
       <SocialMediaBar />
-
     </motion.section>
   );
 }

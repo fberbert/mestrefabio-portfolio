@@ -4,18 +4,18 @@ import Image from "next/image";
 import React, { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
-import { useActiveSectionContext } from "@/context/active-section-context";
 import Typed from "typed.js";
+import { useLang } from "@/context/language-context";
 
 export default function Intro() {
-  const { ref } = useSectionInView("Home", 0.5);
-  const { setActiveSection, setTimeOfLastClick } = useActiveSectionContext();
+  const { t } = useLang();
+  const { ref } = useSectionInView("#home", 0.5);
   const typedRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const yearsOfExperience = new Date().getFullYear() - 2000;
     const typed = new Typed(typedRef.current!, {
-      strings: ["Hello, I'm Fábio. ^1000\n I'm a full-stack developer with " + yearsOfExperience + " years of experience. ^1000\nBring me your ideas, and I'll bring them to life."],
+      strings: t(`intro.typed`).replace("{{YEARS}}", yearsOfExperience.toString()).split("\n"),
       typeSpeed: 50,
       backSpeed: 25,
       backDelay: 5000,
@@ -25,7 +25,7 @@ export default function Intro() {
     return () => {
       typed.destroy();
     };
-  }, []);
+  }, [t]);
 
   return (
     <section
@@ -44,7 +44,7 @@ export default function Intro() {
             }}
           >
             <Image
-              src="/img/profile-picture.jpg"
+              src="/img/profile-picture2.jpg"
               alt="Fábio portrait"
               width="192"
               height="192"

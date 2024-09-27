@@ -16,4 +16,8 @@ module.exports = {
   },
   plugins: [],
   darkMode: "class",
+  safeList: [
+    'font-semibold',
+    'underline',
+  ],
 };

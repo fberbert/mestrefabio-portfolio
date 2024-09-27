@@ -1,15 +1,29 @@
+// header.tsx
 "use client";
 
 import React from "react";
 import { motion } from "framer-motion";
-import { links } from "@/lib/data";
 import Link from "next/link";
 import clsx from "clsx";
+import LanguageSwitch from "@/components/language-switch";
 import { useActiveSectionContext } from "@/context/active-section-context";
+import { useLang } from "@/context/language-context";
+import { translations } from "@/lib/translations";
+
+type Link = {
+  name: string;
+  hash: string;
+};
 
 export default function Header() {
+  const { lang } = useLang();
   const { activeSection, setActiveSection, setTimeOfLastClick } =
     useActiveSectionContext();
+
+  const header = translations[lang].header;
+  const links = header?.links;
+
+  if (!links) return null;
 
   return (
     <header className="z-[999] relative">
@@ -21,7 +35,7 @@ export default function Header() {
 
       <nav className="flex fixed top-[0.15rem] left-1/2 h-12 -translate-x-1/2 py-2">
         <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-black sm:w-[initial] sm:flex-nowrap sm:gap-5">
-          {links.map((link) => (
+          {links.map((link: Link) => (
             <motion.li
               className="h-3/4 flex items-center justify-center relative"
               key={link.hash}
@@ -31,19 +45,19 @@ export default function Header() {
               <Link
                 className={clsx(
                   "flex w-full items-center justify-center px-3 py-3 transition dark:text-gray-500 dark:hover:text-gray-300",
-                    activeSection === link.name
+                  activeSection === link.hash
                     ? "text-black dark:text-gray-200"
-                    : "hover:text-gray-950"
+                    : "hover:text-gray-950",
                 )}
                 href={link.hash}
                 onClick={() => {
-                  setActiveSection(link.name);
+                  setActiveSection(link.hash);
                   setTimeOfLastClick(Date.now());
                 }}
               >
                 {link.name}
 
-                {link.name === activeSection && (
+                {link.hash === activeSection && (
                   <motion.span
                     className="bg-gray-200 rounded-full absolute inset-0 -z-10 dark:bg-gray-800"
                     layoutId="activeSection"
@@ -59,6 +73,7 @@ export default function Header() {
           ))}
         </ul>
       </nav>
+      <LanguageSwitch />
     </header>
   );
 }

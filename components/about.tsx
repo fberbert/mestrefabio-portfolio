@@ -1,3 +1,4 @@
+// about.tsx
 "use client";
 
 import React from "react";
@@ -6,6 +7,7 @@ import SectionHeading from "./section-heading";
 import { motion } from "framer-motion";
 import { useSectionInView } from "@/lib/hooks";
 import MusicVideo from "./music-video";
+import { useLang } from "@/context/language-context";
 
 const fadeInAnimationVariants = {
   initial: {
@@ -34,7 +36,8 @@ const lastItemVariants = {
 };
 
 export default function About() {
-  const { ref } = useSectionInView("About", 0.5);
+  const { t } = useLang();
+  const { ref } = useSectionInView("#about", 0.2);
 
   return (
     <motion.section
@@ -48,17 +51,47 @@ export default function About() {
       }}
       id="about"
     >
-      <SectionHeading>About me</SectionHeading>
+      <SectionHeading>{t("section.about")}</SectionHeading>
       <p className="mb-7 text-center sm:text-justify text-lg sm:text-2xl">
-        Full Stack Engineer. Engaged to React/Next.JS, JavaScript, Artificial
-        Inteligence, Shell Scripting, Python, Cryptocurrencies, Home Assistant
-        and last but not least GNU/Linux!
+        {t("about.description")}
       </p>
 
-      <p>I created a music video using AI to showcase my skills.</p>
+      <p className="mb-7 text-center sm:text-justify text-lg sm:text-2xl">
+        {t("about.phrase1")}
+      </p>
+
+      <ul className="sm:mb-3 sm:ml-9 list-none border-0 border-white border-opacity-60 dark:border-gray-900 rounded-md">
+        {[
+          t("about.stuff1"),
+          t("about.stuff2"),
+          t("about.stuff3"),
+          t("about.stuff4"),
+          t("about.stuff5"),
+          t("about.stuff6"),
+          t("about.stuff7"),
+          t("about.stuff8"),
+        ].map((item, index) => (
+          <motion.li
+            key={index}
+            className="p-4 py-8 bg-white bg-opacity-10 dark:bg-gray-900 dark:bg-opacity-0"
+            variants={fadeInAnimationVariants}
+            initial="initial"
+            whileInView="animate"
+            viewport={{
+              once: false,
+            }}
+            custom={index + 1}
+          >
+            <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+            {item}
+          </motion.li>
+        ))}
+      </ul>
+
+      <p>{t("about.phrase2")}</p>
       <MusicVideo />
 
-      <p className="mt-4 mb-1">Key Creations and Contributions:</p>
+      <p className="mt-4 mb-1">{t("about.creationsTitle")}</p>
 
       <ul className="sm:mb-3 sm:ml-9 list-none border-0 border-white border-opacity-60 dark:border-gray-900 rounded-md">
         <motion.li
@@ -72,15 +105,7 @@ export default function About() {
           custom={1}
         >
           <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
-          Founder of{" "}
-          <a
-            target="_blank"
-            href="https://vivaolinux.com.br"
-            className="underline"
-          >
-            Viva o Linux
-          </a>{" "}
-          - A renowned website in the Linux community.
+          {t("about.vivaLinuxDesc")}
         </motion.li>
 
         <motion.li
@@ -94,14 +119,7 @@ export default function About() {
           custom={2}
         >
           <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
-          <a
-            target="_blank"
-            href="https://automatizando.dev"
-            className="underline"
-          >
-            Automatizando.dev
-          </a>{" "}
-          - A hub for my innovations in home automation and AI.
+          {t("about.automatizandoDesc")}
         </motion.li>
         <motion.li
           className="bg-white bg-opacity-0 dark:bg-gray-900 p-4 py-8 dark:bg-opacity-30"
@@ -114,15 +132,7 @@ export default function About() {
           custom={3}
         >
           <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
-          Inventor of{" "}
-          <a
-            target="_blank"
-            href="https://automatizando.dev/brinquedo"
-            className="underline"
-          >
-            Talking Toy
-          </a>{" "}
-          - An interactive toy integrating Alexa skills and AI.
+          {t("about.talkingToyDesc")}
         </motion.li>
         <motion.li
           className="p-4 py-8 bg-white bg-opacity-10 dark:bg-gray-900 dark:bg-opacity-0"
@@ -135,15 +145,7 @@ export default function About() {
           custom={4}
         >
           <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
-          Developer of{" "}
-          <a
-            target="_blank"
-            href="https://automatizando.dev/garagem"
-            className="underline"
-          >
-            Abrir Garagem
-          </a>{" "}
-          - A smart solution for garage door automation.
+          {t("about.abrirGaragemDesc")}
         </motion.li>
         <motion.li
           className="bg-white bg-opacity-0 dark:bg-gray-900 p-4 py-8 dark:bg-opacity-30"
@@ -156,15 +158,7 @@ export default function About() {
           custom={5}
         >
           <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
-          Instagram Content Creator:{" "}
-          <a
-            target="_blank"
-            href="https://instagram.com/alexabolada"
-            className="underline"
-          >
-            @alexabolada
-          </a>{" "}
-          - Sharing insights and developments in AI and home automation.
+          {t("about.alexaboladaDesc")}
         </motion.li>
         <motion.li
           className="p-4 py-8 bg-white bg-opacity-10 dark:bg-gray-900 dark:bg-opacity-0"
@@ -177,8 +171,7 @@ export default function About() {
           custom={6}
         >
           <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
-          Expert in Cryptocurrency: Active in the field since 2016, with a focus
-          on emerging technologies.
+          {t("about.cryptoDesc")}
         </motion.li>
         <motion.li
           className="bg-white bg-opacity-0 dark:bg-gray-900 p-4 py-8 dark:bg-opacity-30"
@@ -191,8 +184,7 @@ export default function About() {
           custom={7}
         >
           <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
-          Free Software Community Contributor: Since 2002, contributing to
-          various open-source projects.
+          {t("about.openSourceDesc")}
         </motion.li>
         <motion.li
           className="mt-6 mb-3 text-base text-center bg-blue-900 text-white dark:bg-white/10 p-3 rounded-md py-4"
@@ -203,9 +195,7 @@ export default function About() {
             once: false,
           }}
         >
-          I am currently open for a{" "}
-          <span className="font-medium">full-time position</span> as a software
-          developer / devops engineer.
+          {t("about.position")}
         </motion.li>
       </ul>
     </motion.section>

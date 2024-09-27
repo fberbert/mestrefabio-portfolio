@@ -1,3 +1,6 @@
-import { links } from "./data";
+// types.ts
+import { translations } from "@/lib/translations";
 
-export type SectionName = (typeof links)[number]["name"];
+const links = translations.en.header.links;
+
+export type SectionHash = (typeof links)[number]["hash"];

@@ -1,3 +1,4 @@
+// layout.tsx
 import Header from "@/components/header";
 import "./globals.css";
 import { Inter } from "next/font/google";
@@ -7,6 +8,7 @@ import Footer from "@/components/footer";
 import ScrollToTop from "@/components/scroll-to-top";
 import ThemeSwitch from "@/components/theme-switch";
 import ThemeContextProvider from "@/context/theme-context";
+import LanguageContextProvider from "@/context/language-context";
 import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -15,6 +17,9 @@ const exp = new Date().getFullYear() - 2000;
 export const metadata = {
   title: "Mestre Fábio | Personal Portfolio",
   description: `Fábio is a full-stack developer with ${exp} years of experience. Bring me your ideas and I'll bring them to life!`,
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -24,6 +29,8 @@ export default function RootLayout({
 }) {
   // original: #fbe2e3 | #946263 | #dbd7fb | #676394
   // new bases: #1B1A55 | #070F2B | #9290C3 | #535C91
+  //
+
   return (
     <html lang="en" className="!scroll-smooth">
       <body
@@ -33,16 +40,20 @@ export default function RootLayout({
         <div className="bg-[#9290C3] absolute top-[-1rem] -z-10 left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] dark:bg-[#535C91]"></div>
 
         <ThemeContextProvider>
-          <ActiveSectionContextProvider>
-            <BackgroundVideo />
-            <Header />
-            {children}
-            <Footer />
+          <LanguageContextProvider>
+            <ActiveSectionContextProvider>
+              <BackgroundVideo />
+              <Header />
+              {children}
+              <Footer />
 
-            <Toaster position="top-right" />
-            <ScrollToTop />
-            <ThemeSwitch />
-          </ActiveSectionContextProvider>
+              <Toaster position="top-right" />
+              <div className="fixed bottom-5 right-5 flex space-y-2 flex-col sm:flex-col">
+                <ScrollToTop />
+                <ThemeSwitch />
+              </div>
+            </ActiveSectionContextProvider>
+          </LanguageContextProvider>
         </ThemeContextProvider>
       </body>
     </html>
