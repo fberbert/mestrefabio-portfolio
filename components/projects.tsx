@@ -9,12 +9,14 @@ import { useLang } from "@/context/language-context";
 import { translations } from "@/lib/translations";
 import { StaticImageData } from "next/image";
 
-type Project = {
+export type ProjectData = {
   title: string;
   description: string;
   tags: string[];
-  imageUrl: StaticImageData;
-  url: string;
+  imageUrl?: StaticImageData;
+  video?: string;
+  url?: string;
+  visible?: boolean;
 };
 
 export default function Projects() {
@@ -30,7 +32,9 @@ export default function Projects() {
     <section ref={ref} id="projects" className="scroll-mt-28 mb-28">
       <SectionHeading>{t("section.projects")}</SectionHeading>
       <div>
-        {Object.values(projectsData).map((project: Project, index: number) => (
+        {Object.values(projectsData)
+          .filter((project: ProjectData) => project.visible === true)
+          .map((project: ProjectData, index: number) => (
           <React.Fragment key={index}>
             <Project {...project} />
           </React.Fragment>

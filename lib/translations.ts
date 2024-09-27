@@ -93,6 +93,7 @@ export type ProjectData = {
   imageUrl?: StaticImageData;
   video?: string;
   url?: string;
+  visible?: boolean;
 };
 
 export type ProjectsData = {
@@ -223,6 +224,7 @@ export const translations: Translations = {
         tags: ["PHP", "MySQL", "Linux", "Apache", "Nginx"],
         imageUrl: vivaolinuxImg,
         url: "https://www.vivaolinux.com.br",
+        visible: true,
       },
       automatizando: {
         title: "Automatizando.dev",
@@ -231,6 +233,7 @@ export const translations: Translations = {
         tags: ["React", "TypeScript", "Next.js", "Tailwind", "MySQL"],
         imageUrl: automatizandoImg,
         url: "https://automatizando.dev",
+        visible: true,
       },
       abrirgaragem: {
         title: "Open Garage",
@@ -239,6 +242,7 @@ export const translations: Translations = {
         tags: ["React", "Node.js", "Tuya", "Home Assistant", "MySQL"],
         video: "/video/abrir-garagem.mp4",
         url: "https://automatizando.dev/garagem",
+        visible: true,
       },
       brinquedofalante: {
         title: "Talking Toy",
@@ -248,6 +252,7 @@ export const translations: Translations = {
         imageUrl: brinquedofalanteImg,
         video: "/video/brinquedo-falante.mp4",
         url: "https://automatizando.dev/brinquedo",
+        visible: true,
       },
       chatbotcasa: {
         title: "Chatbot with my house",
@@ -257,6 +262,7 @@ export const translations: Translations = {
         imageUrl: chatbotcasaImg,
         video: "/video/chatbot-casa.mp4",
         url: "https://www.instagram.com/p/C3X1r_yAx23/",
+        visible: true,
       },
       monetal: {
         title: "Monetal",
@@ -265,6 +271,7 @@ export const translations: Translations = {
         tags: ["Python", "Django", "Amazon AWS", "Bitcoin"],
         imageUrl: monetalImg,
         url: "https://monetal.com.br",
+        visible: true,
       },
       whereisluiza: {
         title: "Where is Luiza",
@@ -273,6 +280,7 @@ export const translations: Translations = {
         tags: ["React Native", "JavaScript", "Android"],
         imageUrl: whereisluizaImg,
         url: "https://play.google.com/store/apps/details?id=com.whereisluiza",
+        visible: false,
       },
       bitcoinconverter: {
         title: "Bitcoin Converter",
@@ -281,6 +289,7 @@ export const translations: Translations = {
         tags: ["React Native", "JavaScript", "Android"],
         imageUrl: bitcoinconverterImg,
         url: "https://play.google.com/store/apps/details?id=com.bitcoinconverter2",
+        visible: false,
       },
     },
     skills: [
@@ -462,6 +471,7 @@ export const translations: Translations = {
         tags: ["PHP", "MySQL", "Linux", "Apache", "Nginx"],
         imageUrl: vivaolinuxImg,
         url: "https://www.vivaolinux.com.br",
+        visible: true,
       },
       automatizando: {
         title: "Automatizando.dev",
@@ -470,6 +480,7 @@ export const translations: Translations = {
         tags: ["React", "TypeScript", "Next.js", "Tailwind", "MySQL"],
         imageUrl: automatizandoImg,
         url: "https://automatizando.dev",
+        visible: true,
       },
       abrirgaragem: {
         title: "Abrir Garagem",
@@ -478,6 +489,7 @@ export const translations: Translations = {
         tags: ["React", "Node.js", "Tuya", "Home Assistant", "MySQL"],
         video: "/video/abrir-garagem.mp4",
         url: "https://automatizando.dev/garagem",
+        visible: true,
       },
       brinquedofalante: {
         title: "Brinquedo Falante",
@@ -487,6 +499,7 @@ export const translations: Translations = {
         imageUrl: brinquedofalanteImg,
         video: "/video/brinquedo-falante.mp4",
         url: "https://automatizando.dev/brinquedo",
+        visible: true,
       },
       chatbotcasa: {
         title: "Chatbot com minha casa",
@@ -496,6 +509,7 @@ export const translations: Translations = {
         imageUrl: chatbotcasaImg,
         video: "/video/chatbot-casa.mp4",
         url: "https://www.instagram.com/p/C3X1r_yAx23/",
+        visible: true,
       },
       monetal: {
         title: "Monetal",
@@ -504,6 +518,7 @@ export const translations: Translations = {
         tags: ["Python", "Django", "Amazon AWS", "Bitcoin"],
         imageUrl: monetalImg,
         url: "https://monetal.com.br",
+        visible: true,
       },
       whereisluiza: {
         title: "Onde está Luiza",
@@ -512,6 +527,7 @@ export const translations: Translations = {
         tags: ["React Native", "JavaScript", "Android"],
         imageUrl: whereisluizaImg,
         url: "https://play.google.com/store/apps/details?id=com.whereisluiza",
+        visible: false,
       },
       bitcoinconverter: {
         title: "Conversor de Bitcoin",
@@ -520,6 +536,7 @@ export const translations: Translations = {
         tags: ["React Native", "JavaScript", "Android"],
         imageUrl: bitcoinconverterImg,
         url: "https://play.google.com/store/apps/details?id=com.bitcoinconverter2",
+        visible: false,
       },
     },
     skills: [
