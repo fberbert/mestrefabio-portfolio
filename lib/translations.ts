@@ -31,6 +31,7 @@ import bitcoinconverterImg from "@/public/img/projects/bitcoinconverter.jpg";
 import brinquedofalanteImg from "@/public/img/projects/brinquedo-falante.png";
 import chatbotcasaImg from "@/public/img/projects/chatbot-casa.jpg";
 import monetalImg from "@/public/img/projects/monetal.jpg";
+import cursoAutomacaoImg from "@/public/img/projects/curso-automacao.jpg";
 import { StaticImageData } from "next/image";
 import { FaLinux, FaCode, FaReact, FaAmazon } from "react-icons/fa";
 import { SiPhp } from "react-icons/si";
@@ -233,6 +234,15 @@ export const translations: Translations = {
         tags: ["React", "TypeScript", "Next.js", "Tailwind", "MySQL"],
         imageUrl: automatizandoImg,
         url: "https://automatizando.dev",
+        visible: true,
+      },
+      cursoautomacao: {
+        title: "Home Automation Course",
+        description:
+          "An online course on home automation, covering the IoT, Home Assistant, Node-RED and automations with IA.",
+        tags: ["Home Assistant", "IoT", "Artificial Intelligence"],
+        url: "https://automatizando.dev/cursos",
+        imageUrl: cursoAutomacaoImg,
         visible: true,
       },
       abrirgaragem: {
@@ -480,6 +490,15 @@ export const translations: Translations = {
         tags: ["React", "TypeScript", "Next.js", "Tailwind", "MySQL"],
         imageUrl: automatizandoImg,
         url: "https://automatizando.dev",
+        visible: true,
+      },
+      cursoautomacao: {
+        title: "Curso de Automação Residencial",
+        description:
+          "Um curso online sobre automação residencial, abordando IoT, Home Assistant, Node-RED e automações com IA.",
+        tags: ["Home Assistant", "IoT", "Inteligência Artificial"],
+        url: "https://automatizando.dev/cursos",
+        imageUrl: cursoAutomacaoImg,
         visible: true,
       },
       abrirgaragem: {
