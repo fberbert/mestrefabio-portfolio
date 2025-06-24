@@ -1,0 +1,2614 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+<additional_info>
+
+</additional_info>
+
+</file_summary>
+
+<directory_structure>
+actions/
+  sendEmail.ts
+app/
+  globals.css
+  head.tsx
+  icon.tsx
+  layout.tsx
+  page.tsx
+components/
+  about.tsx
+  background-video.tsx
+  contact.tsx
+  experience.tsx
+  footer.tsx
+  header.tsx
+  intro.tsx
+  language-switch.tsx
+  music-video.tsx
+  project.tsx
+  projects.tsx
+  scroll-to-top.tsx
+  section-divider.tsx
+  section-heading.tsx
+  skills.tsx
+  social-media-bar.tsx
+  theme-switch.tsx
+  video-of-project.tsx
+context/
+  active-section-context.tsx
+  language-context.tsx
+  theme-context.tsx
+email/
+  contact-form-email.tsx
+lib/
+  hooks.ts
+  translations.ts
+  types.ts
+  utils.ts
+.eslintrc.json
+.gitignore
+next.config.js
+package.json
+postcss.config.js
+README.md
+tailwind.config.js
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="app/head.tsx">
+// app/head.tsx
+export default function Head() {
+  const exp = new Date().getFullYear() - 2000;
+
+  return (
+    <>
+      <title>a Mestre Fábio | Personal Portfolio</title>
+      <meta
+        name="description"
+        content={`Fábio is a full-stack developer with ${exp} years of experience. Bring me your ideas and I'll bring them to life!`}
+      />
+      <link rel="icon" href="/favicon.ico" />
+    </>
+  );
+}
+</file>
+
+<file path="components/language-switch.tsx">
+"use client";
+
+import { useLang } from "@/context/language-context";
+import React from "react";
+// Importando os ícones das bandeiras
+import { US, BR } from 'country-flag-icons/react/3x2';
+
+export default function LangSwitch() {
+  const { lang, toggleLang } = useLang();
+
+  return (
+    <button
+      className="fixed top-[5px] sm:top-[12px] right-2 sm:right-5 sm:w-[30px] sm:h-[30px] w-[25px] h-[25px] bg-opacity-0 no-border flex items-center justify-center p-0 overflow-hidden brightness-90 hover:brightness-110 active:brightness-90 active:scale-105 transition-all rounded-lg"
+      onClick={toggleLang}
+      aria-label="Toggle language"
+    >
+      {lang === "en" ? (
+        <US
+          title="Mudar para Português"
+          className="object-cover"
+        />
+      ) : (
+        <BR
+          title="Switch to English"
+          className="object-cover"
+        />
+      )}
+    </button>
+  );
+}
+</file>
+
+<file path="components/section-divider.tsx">
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+
+export default function SectionDivider() {
+  return (
+    <motion.div
+      className="bg-gray-200 my-24 h-16 w-1 rounded-full hidden sm:block dark:bg-opacity-20"
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.125 }}
+    ></motion.div>
+  );
+}
+</file>
+
+<file path="components/section-heading.tsx">
+import React from "react";
+
+type SectionHeadingProps = {
+  children: React.ReactNode;
+};
+
+export default function SectionHeading({ children }: SectionHeadingProps) {
+  return (
+    <h2 className="text-3xl font-medium capitalize mb-8 text-center">
+      {children}
+    </h2>
+  );
+}
+</file>
+
+<file path="components/video-of-project.tsx">
+import React from "react";
+import Head from "next/head";
+
+export default function VideoOfProject({src}: {src: string}) {
+  return (
+    <>
+      <Head>
+        <link rel="preload" href={src} as="video" type="video/mp4" />
+      </Head>
+      <div className="w-full padding-top-[56.25%] sm:padding-top-0 my-3">
+        <video className="w-[250px] sm:h-[auto] rounded-3xl object-contain object-center" controls>
+          <source src={src} type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </>
+  );
+}
+</file>
+
+<file path="context/language-context.tsx">
+"use client";
+
+import React, { useEffect, useState, createContext, useContext } from "react";
+import { translations } from "@/lib/translations";
+
+type Lang = "en" | "pt-BR";
+
+type LangContextProviderProps = {
+  children: React.ReactNode;
+};
+
+type LangContextType = {
+  lang: Lang;
+  toggleLang: () => void;
+  t: (key: string) => string;
+};
+
+const LangContext = createContext<LangContextType | null>(null);
+
+// auxiliar function to access nested keys
+const getNestedTranslation = (obj: any, path: string): string => {
+  const keys = path.split(".");
+  let current = obj;
+  for (let key of keys) {
+    if (current[key] === undefined) {
+      return path; // return the path if the key is not found
+    }
+    current = current[key];
+  }
+  return typeof current === "string" ? current : path; // return the path if the key is not found
+};
+
+export default function LangContextProvider({
+  children,
+}: LangContextProviderProps) {
+  const [lang, setLang] = useState<Lang>("en");
+
+  const toggleLang = () => {
+    if (lang === "en") {
+      setLang("pt-BR");
+      window.localStorage.setItem("lang", "pt-BR");
+    } else {
+      setLang("en");
+      window.localStorage.setItem("lang", "en");
+    }
+  };
+
+  const t = (key: string) => {
+    // using the current language, get the translation
+    return getNestedTranslation(translations[lang], key);
+  };
+
+  useEffect(() => {
+    const localLang = window.localStorage.getItem("lang") as Lang | null;
+
+    if (localLang) {
+      setLang(localLang);
+    }
+
+    if (window.navigator.language === "pt-BR") {
+      setLang("pt-BR");
+    }
+  }, []);
+
+  return (
+    <LangContext.Provider
+      value={{
+        lang,
+        toggleLang,
+        t,
+      }}
+    >
+      {children}
+    </LangContext.Provider>
+  );
+}
+
+export function useLang() {
+  const context = useContext(LangContext);
+
+  if (context === null) {
+    throw new Error("useLang must be used within a LangContextProvider");
+  }
+
+  return context;
+}
+</file>
+
+<file path="email/contact-form-email.tsx">
+import React from "react";
+import {
+  Html,
+  Body,
+  Head,
+  Heading,
+  Hr,
+  Container,
+  Preview,
+  Section,
+  Text,
+} from "@react-email/components";
+import { Tailwind } from "@react-email/tailwind";
+
+type ContactFormEmailProps = {
+  message: string;
+  senderEmail: string;
+};
+
+export default function ContactFormEmail({
+  message,
+  senderEmail,
+}: ContactFormEmailProps) {
+  return (
+    <Html>
+      <Head />
+      <Preview>New message from your portfolio site</Preview>
+      <Tailwind>
+        <Body className="bg-gray-100 text-black">
+          <Container>
+            <Section className="bg-white borderBlack my-10 px-10 py-4 rounded-md">
+              <Heading className="leading-tight">
+                You received the following message from the contact form
+              </Heading>
+              <Text>{message}</Text>
+              <Hr />
+              <Text>The sender's email is: {senderEmail}</Text>
+            </Section>
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
+  );
+}
+</file>
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+
+<file path="postcss.config.js">
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+}
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "exclude": ["node_modules"]
+}
+</file>
+
+<file path="app/icon.tsx">
+import { ImageResponse } from 'next/og'
+ 
+// Route segment config
+export const runtime = 'edge'
+ 
+// Image metadata
+export const size = {
+  width: 32,
+  height: 32,
+}
+export const contentType = 'image/png'
+ 
+// Image generation
+export default function Icon() {
+  return new ImageResponse(
+    (
+      // ImageResponse JSX element
+      <div
+        style={{
+          fontSize: 24,
+          background: 'black',
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          color: 'white',
+          borderRadius: '50%',
+        }}
+      >
+        F
+      </div>
+    ),
+    // ImageResponse options
+    {
+      // For convenience, we can re-use the exported icons size metadata
+      // config to also set the ImageResponse's width and height.
+      ...size,
+    }
+  )
+}
+</file>
+
+<file path="app/page.tsx">
+import About from "@/components/about";
+import Contact from "@/components/contact";
+import Experience from "@/components/experience";
+import Intro from "@/components/intro";
+import Projects from "@/components/projects";
+import SectionDivider from "@/components/section-divider";
+import Skills from "@/components/skills";
+
+export default function Home() {
+  return (
+    <main className="flex flex-col items-center px-4">
+      <Intro />
+      <SectionDivider />
+      <About />
+      <Projects />
+      <Skills />
+      <Experience />
+      <Contact />
+    </main>
+  );
+}
+</file>
+
+<file path="components/music-video.tsx">
+import React from "react";
+import Head from "next/head";
+
+export default function MusicVideo() {
+  return (
+    <>
+      <Head>
+        <link rel="preload" href="/video/fabio-music-redux.mp4" as="video" type="video/mp4" />
+      </Head>
+      <div className="relative w-full h-[56.25vw] padding-top-[56.25%] sm:padding-top-0 sm:h-[403px] my-3">
+        <video className="absolute top-0 left-0 w-full h-full sm:h-[auto] rounded-3xl
+          object-contain object-center" controls>
+          <source src="/video/fabio-music-redux.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      </div>
+    </>
+  );
+}
+</file>
+
+<file path="context/active-section-context.tsx">
+"use client";
+
+import type { SectionHash } from "@/lib/types";
+import React, { useState, createContext, useContext } from "react";
+
+type ActiveSectionContextProviderProps = {
+  children: React.ReactNode;
+};
+
+type ActiveSectionContextType = {
+  activeSection: SectionHash;
+  setActiveSection: React.Dispatch<React.SetStateAction<SectionHash>>;
+  timeOfLastClick: number;
+  setTimeOfLastClick: React.Dispatch<React.SetStateAction<number>>;
+};
+
+export const ActiveSectionContext =
+  createContext<ActiveSectionContextType | null>(null);
+
+export default function ActiveSectionContextProvider({
+  children,
+}: ActiveSectionContextProviderProps) {
+  const [activeSection, setActiveSection] = useState<SectionHash>("#home");
+  const [timeOfLastClick, setTimeOfLastClick] = useState(0); // we need to keep track of this to disable the observer temporarily when user clicks on a link
+
+  return (
+    <ActiveSectionContext.Provider
+      value={{
+        activeSection,
+        setActiveSection,
+        timeOfLastClick,
+        setTimeOfLastClick,
+      }}
+    >
+      {children}
+    </ActiveSectionContext.Provider>
+  );
+}
+
+export function useActiveSectionContext() {
+  const context = useContext(ActiveSectionContext);
+
+  if (context === null) {
+    throw new Error(
+      "useActiveSectionContext must be used within an ActiveSectionContextProvider"
+    );
+  }
+
+  return context;
+}
+</file>
+
+<file path="context/theme-context.tsx">
+"use client";
+
+import React, { useEffect, useState, createContext, useContext } from "react";
+
+type Theme = "light" | "dark";
+
+type ThemeContextProviderProps = {
+  children: React.ReactNode;
+};
+
+type ThemeContextType = {
+  theme: Theme;
+  toggleTheme: () => void;
+};
+
+const ThemeContext = createContext<ThemeContextType | null>(null);
+
+export default function ThemeContextProvider({
+  children,
+}: ThemeContextProviderProps) {
+  const [theme, setTheme] = useState<Theme>("dark");
+
+  const toggleTheme = () => {
+    if (theme === "light") {
+      setTheme("dark");
+      window.localStorage.setItem("theme", "dark");
+      document.documentElement.classList.add("dark");
+    } else {
+      setTheme("light");
+      window.localStorage.setItem("theme", "light");
+      document.documentElement.classList.remove("dark");
+    }
+  };
+
+  useEffect(() => {
+    const localTheme = window.localStorage.getItem("theme") as Theme | null;
+
+    if (localTheme) {
+      setTheme(localTheme);
+
+      if (localTheme === "dark") {
+        document.documentElement.classList.add("dark");
+      }
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("dark");
+      document.documentElement.classList.add("dark");
+    }
+  }, []);
+
+  return (
+    <ThemeContext.Provider
+      value={{
+        theme,
+        toggleTheme,
+      }}
+    >
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+
+  if (context === null) {
+    throw new Error("useTheme must be used within a ThemeContextProvider");
+  }
+
+  return context;
+}
+</file>
+
+<file path="lib/types.ts">
+// types.ts
+import { translations } from "@/lib/translations";
+
+const links = translations.en.header.links;
+
+export type SectionHash = (typeof links)[number]["hash"];
+</file>
+
+<file path="lib/utils.ts">
+export const validateString = (
+  value: unknown,
+  maxLength: number
+): value is string => {
+  if (!value || typeof value !== "string" || value.length > maxLength) {
+    return false;
+  }
+
+  return true;
+};
+
+export const getErrorMessage = (error: unknown): string => {
+  let message: string;
+
+  if (error instanceof Error) {
+    message = error.message;
+  } else if (error && typeof error === "object" && "message" in error) {
+    message = String(error.message);
+  } else if (typeof error === "string") {
+    message = error;
+  } else {
+    message = "Something went wrong";
+  }
+
+  return message;
+};
+</file>
+
+<file path="actions/sendEmail.ts">
+"use server";
+
+import React from "react";
+import { Resend } from "resend";
+import { validateString, getErrorMessage } from "@/lib/utils";
+import ContactFormEmail from "@/email/contact-form-email";
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+/* create and .env.local file in the root of the project and add the following line:
+ * RESEND_API_KEY=your_api_key
+ * You can get your API key by signing up at https://resend.com
+ */
+
+export const sendEmail = async (formData: FormData) => {
+  const senderEmail = formData.get("senderEmail");
+  const message = formData.get("message");
+
+  // simple server-side validation
+  if (!validateString(senderEmail, 500)) {
+    return {
+      error: "Invalid sender email",
+    };
+  }
+  if (!validateString(message, 5000)) {
+    return {
+      error: "Invalid message",
+    };
+  }
+
+  let data;
+  try {
+    data = await resend.emails.send({
+      from: "Contact Form <onboarding@resend.dev>",
+      to: "fberbert@gmail.com",
+      subject: "Contato Mestre Fábio",
+      reply_to: senderEmail,
+      react: React.createElement(ContactFormEmail, {
+        message: message,
+        senderEmail: senderEmail,
+      }),
+    });
+  } catch (error: unknown) {
+    return {
+      error: getErrorMessage(error),
+    };
+  }
+
+  return {
+    data,
+  };
+};
+</file>
+
+<file path="components/background-video.tsx">
+import React from "react";
+
+export default function BackgroundVideo() {
+  return (
+    <video
+      autoPlay
+      muted
+      loop
+      className="fixed top-0 left-0 bottom-0 w-full h-full z-[-100] opacity-40 dark:opacity-10 object-cover object-center"
+    >
+      <source src="/video/code.mp4" type="video/mp4" />
+    </video>
+  );
+}
+</file>
+
+<file path="components/scroll-to-top.tsx">
+"use client";
+
+import React from "react";
+import { useActiveSectionContext } from "@/context/active-section-context";
+import { FaArrowUp } from "react-icons/fa";
+
+export default function ScrollToTop() {
+  const { setActiveSection, setTimeOfLastClick } = useActiveSectionContext();
+  const scrollToTop = () => {
+    setActiveSection("#home");
+    setTimeOfLastClick(Date.now());
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  return (
+    <button
+      className="bg-white w-[2.2rem] h-[2.2rem] sm:w-[3rem] sm:h-[3rem] bg-opacity-80 backdrop-blur-[0.5rem] no-border border-white border-opacity-40 shadow-2xl rounded-full flex items-center justify-center sm:hover:scale-[1.15] transition-all dark:bg-gray-950"
+      onClick={scrollToTop}
+      aria-label="Scroll to top"
+    >
+      <FaArrowUp />
+    </button>
+  );
+}
+</file>
+
+<file path="components/theme-switch.tsx">
+"use client";
+
+import { useTheme } from "@/context/theme-context";
+import React from "react";
+import { BsMoon, BsSun } from "react-icons/bs";
+
+export default function ThemeSwitch() {
+  const { theme, toggleTheme } = useTheme();
+
+  return (
+    <button
+      className="bg-white w-[2.2rem] h-[2.2rem] sm:w-[3rem] sm:h-[3rem] bg-opacity-80 backdrop-blur-[0.5rem] no-border border-white border-opacity-40 shadow-2xl rounded-full flex items-center justify-center sm:hover:scale-[1.15] transition-all dark:bg-gray-950"
+      onClick={toggleTheme}
+      aria-label="Toggle theme"
+    >
+      {theme === "light" ? (
+        <BsSun title="Switch to dark theme" />
+      ) : (
+        <BsMoon title="Switch to light theme" />
+      )}
+    </button>
+  );
+}
+</file>
+
+<file path="lib/hooks.ts">
+// hooks.ts
+import { useActiveSectionContext } from "@/context/active-section-context";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
+import type { SectionHash } from "./types";
+
+export function useSectionInView(sectionHash: SectionHash, threshold = 0.75) {
+  const { ref, inView } = useInView({
+    threshold,
+  });
+  const { setActiveSection, timeOfLastClick } = useActiveSectionContext();
+
+  useEffect(() => {
+    if (inView && Date.now() - timeOfLastClick > 1000) {
+      setActiveSection(sectionHash);
+    }
+  }, [inView, setActiveSection, timeOfLastClick, sectionHash]);
+
+  return {
+    ref,
+    inView
+  };
+}
+</file>
+
+<file path="lib/translations.ts">
+// translations.ts
+/*
+ * Usage:
+ *
+ * 1. Import some string from this file:
+ *
+ *   import { useLang } from "@/context/language-context";
+ *   import { t } from "@/lib/translations";
+ *
+ *   const { t } = useLang();
+ *   const translatedString = t("intro.typed"); // automatically detects the language
+ *
+ * 2. Import some object from this file:
+ *
+ *  import { useLang } from "@/context/language-context";
+ *  import { translations } from "@/lib/translations";
+ *
+ *  const { lang } = useLang();
+ *
+ *  const header = translations[lang].header;
+ *  const projectsData = translations[lang].projectsData;
+ *
+ *
+ * */
+import React from "react";
+import vivaolinuxImg from "@/public/img/projects/vivaolinux.jpg";
+import automatizandoImg from "@/public/img/projects/automatizando.jpg";
+import whereisluizaImg from "@/public/img/projects/whereisluiza.jpg";
+import bitcoinconverterImg from "@/public/img/projects/bitcoinconverter.jpg";
+// import abrirgaragemImg from "@/public/img/projects/abrir-garagem.jpg";
+import brinquedofalanteImg from "@/public/img/projects/brinquedo-falante.png";
+import chatbotcasaImg from "@/public/img/projects/chatbot-casa.jpg";
+import monetalImg from "@/public/img/projects/monetal.jpg";
+import cursoAutomacaoImg from "@/public/img/projects/curso-automacao.jpg";
+import { StaticImageData } from "next/image";
+import { FaLinux, FaCode, FaReact, FaAmazon } from "react-icons/fa";
+import { SiPhp } from "react-icons/si";
+import { LuRouter } from "react-icons/lu";
+
+// Definição dos tipos
+export type Meta = {
+  title: string;
+  description: string;
+};
+
+export type Link = {
+  name: string;
+  hash: string;
+};
+
+export type Header = {
+  links: Link[];
+};
+
+export type Menu = { [key: string]: string };
+
+export type Section = { [key: string]: string };
+
+export type Intro = { [key: string]: string };
+
+export type About = {
+  description: string;
+  phrase1: string;
+  stuff1: string;
+  stuff2: string;
+  stuff3: string;
+  stuff4: string;
+  stuff5: string;
+  stuff6: string;
+  stuff7: string;
+  stuff8: string;
+  phrase2: string;
+  creationsTitle: string;
+  vivaLinuxDesc: string;
+  automatizandoDesc: string;
+  talkingToyDesc: string;
+  abrirGaragemDesc: string;
+  alexaboladaDesc: string;
+  cryptoDesc: string;
+  openSourceDesc: string;
+  position: string;
+};
+
+export type Project = {
+  visitProject: string;
+  expandVideo: string;
+  hideVideo: string;
+};
+
+export type ProjectData = {
+  title: string;
+  description: string;
+  tags: string[];
+  imageUrl?: StaticImageData;
+  video?: string;
+  url?: string;
+  visible?: boolean;
+};
+
+export type ProjectsData = {
+  [key: string]: ProjectData;
+};
+
+export type skills = string[];
+
+export type Experience = {
+  title: string;
+  location: string;
+  description: string;
+  icon: JSX.Element;
+  date: string;
+};
+
+export type ExperiencesData = Experience[];
+
+export type Contact = {
+  description: string;
+  email: string;
+  message: string;
+  submit: string;
+  footer: string;
+};
+
+export type Footer = {
+  rights: string;
+  about: string;
+  github: string;
+};
+
+export type Translations = {
+  [lang: string]: {
+    meta: Meta;
+    header: Header;
+    menu: Menu;
+    section: Section;
+    intro: Intro;
+    about: About;
+    project: Project;
+    projectsData: ProjectsData;
+    skills: skills;
+    experiencesData: ExperiencesData;
+    contact: Contact;
+    footer: Footer;
+  };
+};
+
+export const translations: Translations = {
+  en: {
+    meta: {
+      title: "Mestre Fábio | Personal Portfolio",
+      description:
+        "Fábio is a full-stack developer with {{EXP}} years of experience. Bring me your ideas and I'll bring them to life!",
+    },
+    header: {
+      links: [
+        { name: "Home", hash: "#home" },
+        { name: "About", hash: "#about" },
+        { name: "Projects", hash: "#projects" },
+        { name: "Skills", hash: "#skills" },
+        { name: "Experience", hash: "#experience" },
+        { name: "Contact", hash: "#contact" },
+      ],
+    },
+    menu: {
+      home: "Home",
+      about: "About",
+      projects: "Projects",
+      skills: "Skills",
+      experience: "Experience",
+      contact: "Contact",
+    },
+    section: {
+      about: "About me",
+      projects: "Notable projects",
+      skills: "Skills",
+      experience: "Experience",
+      contact: "Contact",
+    },
+    intro: {
+      typed:
+        "Hello, I'm Fábio. ^1000\n I'm a full-stack developer with {{YEARS}} years of experience. ^1000\nBring me your ideas, and I'll bring them to life.",
+    },
+    about: {
+      description:
+        "Self-taught Full Stack Engineer. Engaged to React/Next.JS, JavaScript, Artificial Intelligence, Shell Scripting, Python, Cryptocurrencies, Home Assistant and last but not least GNU/Linux!",
+      phrase1: "Stuff I can help you with:",
+      stuff1: "Development of responsive, dynamic and modern websites.",
+      stuff2:
+        "Installation and configuration of Linux servers locally or in the cloud, such as AWS, Google Cloud and Azure.",
+      stuff3: "Development of chatbots with AI.",
+      stuff4: "Database management and optimization.",
+      stuff5: "Training AI models specific to your needs.",
+      stuff6: "Development of Android applications.",
+      stuff7: "Shell scripts for task automation on servers.",
+      stuff8: "Create home automation solutions and integrate with any system.",
+      phrase2: "I created the music video below using AI:",
+      creationsTitle: "Key Creations and Contributions:",
+      vivaLinuxDesc:
+        "Founder of Viva o Linux - A renowned website in the Linux community.",
+      automatizandoDesc:
+        "Automatizando.dev - A hub for my innovations in home automation and AI.",
+      talkingToyDesc:
+        "Inventor of Talking Toy - An interactive toy integrating Alexa skills and AI.",
+      abrirGaragemDesc:
+        "Developer of Abrir Garagem - A smart solution for garage door automation.",
+      alexaboladaDesc:
+        "Instagram Content Creator: @alexabolada - Sharing insights and developments in AI and home automation.",
+      cryptoDesc:
+        "Expert in Cryptocurrency: Active in the field since 2016, solid knowledge in blockchain and exchange APIs.",
+      openSourceDesc:
+        "Free Software Community Contributor: Since 2002, contributing to various open-source projects.",
+      position:
+        "I am currently open for a full-time position as a software developer / DevOps engineer.",
+    },
+    project: {
+      visitProject: "Visit project",
+      expandVideo: "Expand video",
+      hideVideo: "Hide video",
+    },
+    projectsData: {
+      vivaolinux: {
+        title: "Viva o Linux",
+        description:
+          "I founded this renowned website in 2002. Within over a decade, it became the largest Linux community in Brazil, featuring forums, articles, and code sharing.",
+        tags: ["PHP", "MySQL", "Linux", "Apache", "Nginx"],
+        imageUrl: vivaolinuxImg,
+        url: "https://www.vivaolinux.com.br",
+        visible: true,
+      },
+      automatizando: {
+        title: "Automatizando.dev",
+        description:
+          "A hub for my innovations in home automation and AI, where I serve as the full-stack developer. It features EAD, a forum, and articles.",
+        tags: ["React", "TypeScript", "Next.js", "Tailwind", "MySQL"],
+        imageUrl: automatizandoImg,
+        url: "https://automatizando.dev",
+        visible: true,
+      },
+      cursoautomacao: {
+        title: "Home Automation Course",
+        description:
+          "An online course on home automation, covering the IoT, Home Assistant, Node-RED and automations with IA.",
+        tags: ["Home Assistant", "IoT", "Artificial Intelligence"],
+        url: "https://automatizando.dev/cursos",
+        imageUrl: cursoAutomacaoImg,
+        visible: true,
+      },
+      abrirgaragem: {
+        title: "Open Garage",
+        description:
+          "A web app that opens garage doors via a cloud-based API and IoT device, enabling remote access. It includes access logs, user management, and scheduling.",
+        tags: ["React", "Node.js", "Tuya", "Home Assistant", "MySQL"],
+        video: "/video/abrir-garagem.mp4",
+        url: "https://automatizando.dev/garagem",
+        visible: true,
+      },
+      brinquedofalante: {
+        title: "Talking Toy",
+        description:
+          "A talking plush toy enhanced with AI for interactive play, integrating a modified Alexa Echo Dot, portable battery, a web app for personality customization, and an API connecting to OpenAI's text engine.",
+        tags: ["React", "Node.js", "OpenAI", "Alexa Skills Kit"],
+        imageUrl: brinquedofalanteImg,
+        video: "/video/brinquedo-falante.mp4",
+        url: "https://automatizando.dev/brinquedo",
+        visible: true,
+      },
+      chatbotcasa: {
+        title: "Chatbot with my house",
+        description:
+          "A chatbot that controls the house using natural language, with integration with Home Assistant and OpenAI. You talk to the chatbot, and it decides which devices to turn on or off to improve your day.",
+        tags: ["Home Assistant", "OpenAI", "Node.js", "ChatGPT", "Twilio"],
+        imageUrl: chatbotcasaImg,
+        video: "/video/chatbot-casa.mp4",
+        url: "https://www.instagram.com/p/C3X1r_yAx23/",
+        visible: true,
+      },
+      monetal: {
+        title: "Monetal",
+        description:
+          "A corporate website in Python/Django for a cryptocurrency consulting company.",
+        tags: ["Python", "Django", "Amazon AWS", "Bitcoin"],
+        imageUrl: monetalImg,
+        url: "https://monetal.com.br",
+        visible: true,
+      },
+      whereisluiza: {
+        title: "Where is Luiza",
+        description:
+          "A simple children's game for Android where the goal is to find where the character Luiza is.",
+        tags: ["React Native", "JavaScript", "Android"],
+        imageUrl: whereisluizaImg,
+        url: "https://play.google.com/store/apps/details?id=com.whereisluiza",
+        visible: false,
+      },
+      bitcoinconverter: {
+        title: "Bitcoin Converter",
+        description:
+          "A simple Bitcoin converter that converts amounts of Bitcoin to USD and Brazilian Real, and vice versa.",
+        tags: ["React Native", "JavaScript", "Android"],
+        imageUrl: bitcoinconverterImg,
+        url: "https://play.google.com/store/apps/details?id=com.bitcoinconverter2",
+        visible: false,
+      },
+    },
+    skills: [
+      "HTML",
+      "CSS",
+      "Linux",
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Node.js",
+      "Express",
+      "Android",
+      "React Native",
+      "Python",
+      "Django",
+      "Git",
+      "Shell Scripting",
+      "Amazon Web Services",
+      "Artificial Intelligence",
+      "OpenAI",
+      "ChatGPT",
+      "AI Prompt",
+      "Tailwind",
+      "Bootstrap",
+      "Prisma",
+      "SQL",
+      "NoSQL",
+      "MongoDB",
+      "MySQL",
+      "PostgreSQL",
+      "Jest",
+      "IoT",
+      "Home Assistant",
+      "Scrum",
+    ],
+    experiencesData: [
+      {
+        title: "GNU/Linux System Administrator",
+        location: "LinuxSolutions - Rio de Janeiro, Brazil",
+        description:
+          "I obtained my LPI certificate 6 months before graduating and got my first job immediately.",
+        icon: React.createElement(FaLinux),
+        date: "2000 - 2001",
+      },
+      {
+        title: "Full-Stack Developer and DevOps",
+        location: "ISM - Rio de Janeiro, Brazil",
+        description:
+          "I worked as a full-stack developer and DevOps for the advanced support sector of the internet provider ISM.",
+        icon: React.createElement(LuRouter),
+        date: "2001 - 2004",
+      },
+      {
+        title: "Full-Stack Developer and DevOps",
+        location: "Viva o Linux",
+        description:
+          "I acted as a self-contracted individual in this project, which involved everything from the creation and maintenance of the website to the maintenance of the servers.",
+        icon: React.createElement(SiPhp),
+        date: "2002 - 2022",
+      },
+      {
+        title: "Freelancer Developer",
+        location: "",
+        description:
+          "I have worked as a freelancer developer for several companies and projects.",
+        icon: React.createElement(FaCode),
+        date: "2004 - 2022",
+      },
+      {
+        title: "Full-Stack Developer and DevOps",
+        location: "Automatizando.dev",
+        description:
+          "I am the founder and full-stack developer of Automatizando.dev, a hub for my innovations in home automation and AI.",
+        icon: React.createElement(FaReact),
+        date: "2022 - present",
+      },
+      {
+        title: "Amazon AWS Architect",
+        location: "Aivis - Nova Friburgo, Brazil",
+        description:
+          "I am currently working as an Amazon AWS architect for the company Aivis.",
+        icon: React.createElement(FaAmazon),
+        date: "2024 - present",
+      },
+    ],
+    contact: {
+      description: `Please contact me directly at <a class="underline" href="mailto:fabio@mestrefabio.com">fabio@mestrefabio.com</a> or through this form.`,
+      email: "Your email",
+      message: "Your message",
+      submit: "Send message",
+      footer: "You can also reach me on social media:",
+    },
+    footer: {
+      rights: "© {{YEAR}} Fábio Berbert de Paula. All rights reserved.",
+      about: `About this website: built with React & Next.js (App Router & Server Actions), TypeScript, Tailwind CSS, Framer Motion, Typed.js, React Email & Resend, hosted on Amazon S3.`, 
+      github: "You can download the source code for this website on my",
+    },
+  },
+  "pt-BR": {
+    meta: {
+      title: "Mestre Fábio | Portfólio Pessoal",
+      description:
+        "Fábio é um desenvolvedor full-stack com {{EXP}} anos de experiência. Traga-me suas ideias e eu as trarei à vida!",
+    },
+    header: {
+      links: [
+        { name: "Início", hash: "#home" },
+        { name: "Sobre", hash: "#about" },
+        { name: "Projetos", hash: "#projects" },
+        { name: "Habilidades", hash: "#skills" },
+        { name: "Experiência", hash: "#experience" },
+        { name: "Contato", hash: "#contact" },
+      ],
+    },
+    menu: {
+      home: "Início",
+      about: "Sobre",
+      projects: "Projetos",
+      skills: "Habilidades",
+      experience: "Experiência",
+      contact: "Contato",
+    },
+    section: {
+      about: "Sobre mim",
+      projects: "Principais Projetos",
+      skills: "Habilidades",
+      experience: "Experiência",
+      contact: "Contato",
+    },
+    intro: {
+      typed:
+        "Olá, meu nome é Fábio. ^1000\n Sou um Desenvolvedor Full-Stack com {{YEARS}} anos de experiência. ^1000\nEstou pronto para transformar suas ideias em realidade.",
+    },
+    about: {
+      description:
+        "Desenvolvedor Full Stack, auto-didata, engajado com React/Next.JS, JavaScript/TypeScript, Inteligência Artificial, Shell Scripting, Python e faixa preta em Linux!",
+      phrase1: "Coisas que posso te ajudar:",
+      stuff1: "Desenvolvimento de websites responsivos, dinâmicos e modernos.",
+      stuff2:
+        "Instalação e configuração de servidores Linux localmente ou na nuvem, como AWS, Google Cloud e Azure.",
+      stuff3: "Desenvolvimento de chatbots com IA.",
+      stuff4: "Gerenciamento e otimização de banco de dados.",
+      stuff5:
+        "Treinamento de modelos de IA específicos para suas necessidades.",
+      stuff6: "Desenvolvimento de aplicativos Android.",
+      stuff7: "Scripts em shell para automação de tarefas em servidores.",
+      stuff8:
+        "Criar soluções de automação residencial/comercial e integrar com qualquer sistema.",
+      phrase2: "Eu criei a música abaixo usando IA:",
+      creationsTitle: "Principais Criações e Contribuições:",
+      vivaLinuxDesc:
+        "Fundador do Viva o Linux - Famoso site da comunidade Linux.",
+      automatizandoDesc:
+        "Automatizando.dev - Um hub para minhas inovações em automação residencial e IA.",
+      talkingToyDesc:
+        "Inventor do Brinquedo Falante - Um brinquedo interativo que usa IA para conversar.",
+      abrirGaragemDesc:
+        "Desenvolvedor do Abrir Garagem - Uma solução inteligente para automação de portas de garagem.",
+      alexaboladaDesc:
+        "Criador de conteúdo no Instagram: @alexabolada - publicando minhas inventividades em automação residencial.",
+      cryptoDesc:
+        "Especialista em Criptomoedas: Estudioso desde 2016, sólidos conhecimentos em blockchain e APIs de exchanges.",
+      openSourceDesc:
+        "Contribuidor para a Comunidade de Software Livre: Desde 2002, contribuindo para vários projetos de código aberto.",
+      position:
+        "Estou atualmente aberto para oportunidades como desenvolvedor de software / engenheiro de DevOps.",
+    },
+    project: {
+      visitProject: "Ver projeto",
+      expandVideo: "Expandir vídeo",
+      hideVideo: "Ocultar vídeo",
+    },
+    projectsData: {
+      vivaolinux: {
+        title: "Viva o Linux",
+        description:
+          "Eu fundei este renomado site em 2002. Em mais de uma década, tornou-se a maior comunidade Linux no Brasil, apresentando fóruns, artigos e compartilhamento de código.",
+        tags: ["PHP", "MySQL", "Linux", "Apache", "Nginx"],
+        imageUrl: vivaolinuxImg,
+        url: "https://www.vivaolinux.com.br",
+        visible: true,
+      },
+      automatizando: {
+        title: "Automatizando.dev",
+        description:
+          "Um hub para minhas inovações em automação residencial e IA, onde atuo como desenvolvedor full-stack. Inclui EAD, um fórum e artigos.",
+        tags: ["React", "TypeScript", "Next.js", "Tailwind", "MySQL"],
+        imageUrl: automatizandoImg,
+        url: "https://automatizando.dev",
+        visible: true,
+      },
+      cursoautomacao: {
+        title: "Curso de Automação Residencial",
+        description:
+          "Um curso online sobre automação residencial, abordando IoT, Home Assistant, Node-RED e automações com IA.",
+        tags: ["Home Assistant", "IoT", "Inteligência Artificial"],
+        url: "https://automatizando.dev/cursos",
+        imageUrl: cursoAutomacaoImg,
+        visible: true,
+      },
+      abrirgaragem: {
+        title: "Abrir Garagem",
+        description:
+          "Um aplicativo web que abre portas de garagem por meio de uma API baseada em nuvem e um dispositivo IoT, permitindo acesso remoto. Inclui registros de acesso, gerenciamento de usuários e agendamento.",
+        tags: ["React", "Node.js", "Tuya", "Home Assistant", "MySQL"],
+        video: "/video/abrir-garagem.mp4",
+        url: "https://automatizando.dev/garagem",
+        visible: true,
+      },
+      brinquedofalante: {
+        title: "Brinquedo Falante",
+        description:
+          "Um brinquedo de pelúcia falante aprimorado com IA para brincadeiras interativas, integrando uma Alexa Echo Dot modificada, bateria portátil, um aplicativo web para personalização de personalidade e uma API conectando à engine da OpenAI.",
+        tags: ["React", "Node.js", "OpenAI", "Alexa Skills Kit"],
+        imageUrl: brinquedofalanteImg,
+        video: "/video/brinquedo-falante.mp4",
+        url: "https://automatizando.dev/brinquedo",
+        visible: true,
+      },
+      chatbotcasa: {
+        title: "Chatbot com minha casa",
+        description:
+          "Um chatbot que controla a casa usando linguagem natural, com integração ao Home Assistant e OpenAI. Você conversa com o chatbot, e ele decide quais dispositivos ligar ou desligar para melhorar seu dia.",
+        tags: ["Home Assistant", "OpenAI", "Node.js", "ChatGPT", "Twilio"],
+        imageUrl: chatbotcasaImg,
+        video: "/video/chatbot-casa.mp4",
+        url: "https://www.instagram.com/p/C3X1r_yAx23/",
+        visible: true,
+      },
+      monetal: {
+        title: "Monetal",
+        description:
+          "Um site corporativo em Python/Django para uma empresa de consultoria em criptomoedas.",
+        tags: ["Python", "Django", "Amazon AWS", "Bitcoin"],
+        imageUrl: monetalImg,
+        url: "https://monetal.com.br",
+        visible: true,
+      },
+      whereisluiza: {
+        title: "Onde está Luiza",
+        description:
+          "Um jogo infantil simples para Android, onde o objetivo é encontrar onde a personagem Luiza está.",
+        tags: ["React Native", "JavaScript", "Android"],
+        imageUrl: whereisluizaImg,
+        url: "https://play.google.com/store/apps/details?id=com.whereisluiza",
+        visible: false,
+      },
+      bitcoinconverter: {
+        title: "Conversor de Bitcoin",
+        description:
+          "Um conversor de Bitcoin simples que converte quantidades de Bitcoin para USD e Real brasileiro, e vice-versa.",
+        tags: ["React Native", "JavaScript", "Android"],
+        imageUrl: bitcoinconverterImg,
+        url: "https://play.google.com/store/apps/details?id=com.bitcoinconverter2",
+        visible: false,
+      },
+    },
+    skills: [
+      "HTML",
+      "CSS",
+      "Linux",
+      "JavaScript",
+      "TypeScript",
+      "React",
+      "Next.js",
+      "Node.js",
+      "Express",
+      "Android",
+      "React Native",
+      "Python",
+      "Django",
+      "Git",
+      "Shell Script",
+      "Amazon Web Services",
+      "Inteligência Artificial",
+      "OpenAI",
+      "ChatGPT",
+      "AI Prompt",
+      "Tailwind",
+      "Bootstrap",
+      "Prisma",
+      "SQL",
+      "NoSQL",
+      "MongoDB",
+      "MySQL",
+      "PostgreSQL",
+      "Jest",
+      "IoT",
+      "Home Assistant",
+      "Scrum",
+    ],
+    experiencesData: [
+      {
+        title: "Administrador de Sistemas GNU/Linux",
+        location: "LinuxSolutions - Rio de Janeiro, Brasil",
+        description:
+          "Obtive meu certificado LPI 6 meses antes de me formar e consegui meu primeiro emprego imediatamente.",
+        icon: React.createElement(FaLinux),
+        date: "2000 - 2001",
+      },
+      {
+        title: "Desenvolvedor Full-Stack e DevOps",
+        location: "ISM - Rio de Janeiro, Brasil",
+        description:
+          "Trabalhei como desenvolvedor full-stack e DevOps para o setor de suporte avançado do provedor de internet ISM.",
+        icon: React.createElement(LuRouter),
+        date: "2001 - 2004",
+      },
+      {
+        title: "Desenvolvedor Full-Stack e DevOps",
+        location: "Viva o Linux",
+        description:
+          "Atuei como pessoa jurídica neste projeto, que envolveu desde a criação e manutenção do site até a manutenção dos servidores.",
+        icon: React.createElement(SiPhp),
+        date: "2002 - 2022",
+      },
+      {
+        title: "Desenvolvedor Freelancer",
+        location: "",
+        description:
+          "Trabalhei como desenvolvedor freelancer para diversas empresas e projetos.",
+        icon: React.createElement(FaCode),
+        date: "2004 - 2022",
+      },
+      {
+        title: "Desenvolvedor Full-Stack e DevOps",
+        location: "Automatizando.dev",
+        description:
+          "Sou o fundador e desenvolvedor full-stack da Automatizando.dev, um hub para minhas inovações em automação residencial e IA.",
+        icon: React.createElement(FaReact),
+        date: "2022 - presente",
+      },
+      {
+        title: "Arquiteto Amazon AWS",
+        location: "Aivis - Nova Friburgo, Brasil",
+        description:
+          "Atualmente trabalho como arquiteto Amazon AWS para a empresa Aivis.",
+        icon: React.createElement(FaAmazon),
+        date: "2024 - presente",
+      },
+    ],
+    contact: {
+      description: `Entre em contato diretamente comigo pelo e-mail <a class="underline" href="mailto:fabio@mestrefabio.com">fabio@mestrefabio.com</a> ou através do formulário abaixo.`,
+      email: "Seu email",
+      message: "Sua mensagem",
+      submit: "Enviar mensagem",
+      footer: "Você também pode me encontrar nas redes sociais:",
+    },
+    footer: {
+      rights: "© {{YEAR}} Fábio Berbert de Paula. Todos os direitos reservados.",
+      about: `Sobre este site: construído com React & Next.js (App Router & Server Actions), TypeScript, Tailwind CSS, Framer Motion, Typed.js, React Email & Resend, hospedado na Amazon S3.`,
+      github: "Você pode baixar o código-fonte deste site no meu",
+    },
+  },
+};
+</file>
+
+<file path=".eslintrc.json">
+{
+  "extends": "next/core-web-vitals",
+  "root": true,
+  "rules": {
+    "react/no-unescaped-entities": 0
+  }
+}
+</file>
+
+<file path="next.config.js">
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  }
+  // experimental: {
+  //   serverActions: true,
+  // },
+};
+
+module.exports = nextConfig;
+</file>
+
+<file path="tailwind.config.js">
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
+        "gradient-conic":
+          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+    },
+  },
+  plugins: [],
+  darkMode: "class",
+  safeList: [
+    'font-semibold',
+    'underline',
+  ],
+};
+</file>
+
+<file path="app/globals.css">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  --line-color: #e5e7eb;
+}
+
+html.dark {
+  --line-color: rgba(255, 255, 255, 0.2);
+}
+
+.borderBlack {
+  @apply border border-black/10;
+}
+</file>
+
+<file path="components/projects.tsx">
+// projects.tsx
+"use client";
+
+import React from "react";
+import SectionHeading from "./section-heading";
+import Project from "./project";
+import { useSectionInView } from "@/lib/hooks";
+import { useLang } from "@/context/language-context";
+import { translations } from "@/lib/translations";
+import { StaticImageData } from "next/image";
+
+export type ProjectData = {
+  title: string;
+  description: string;
+  tags: string[];
+  imageUrl?: StaticImageData;
+  video?: string;
+  url?: string;
+  visible?: boolean;
+};
+
+export default function Projects() {
+  const { t, lang } = useLang();
+  const { ref } = useSectionInView("#projects", 0.2);
+
+  // Access project data directly from translations
+  const projectsData = translations[lang].projectsData;
+
+  if (!projectsData) return null; // Safeguard for missing project data
+
+  return (
+    <section ref={ref} id="projects" className="scroll-mt-28 mb-28">
+      <SectionHeading>{t("section.projects")}</SectionHeading>
+      <div>
+        {Object.values(projectsData)
+          .filter((project: ProjectData) => project.visible === true)
+          .map((project: ProjectData, index: number) => (
+          <React.Fragment key={index}>
+            <Project {...project} />
+          </React.Fragment>
+        ))}
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="components/skills.tsx">
+"use client";
+
+import React from "react";
+import SectionHeading from "./section-heading";
+import { useSectionInView } from "@/lib/hooks";
+import { motion } from "framer-motion";
+import { useLang } from "@/context/language-context";
+import { translations } from "@/lib/translations";
+
+const fadeInAnimationVariants = {
+  initial: {
+    opacity: 0,
+    y: 100,
+  },
+  animate: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.05 * index,
+    },
+  }),
+};
+
+export default function Skills() {
+  const { t, lang } = useLang();
+  const { ref } = useSectionInView("#skills", 0.2);
+
+  const skillsData = translations[lang].skills;
+  if (!skillsData) return null;
+
+  return (
+    <section
+      id="skills"
+      ref={ref}
+      className="mb-28 max-w-[53rem] scroll-mt-28 text-center sm:mb-40"
+    >
+      <SectionHeading>{t("section.skills")}</SectionHeading>
+      <ul className="flex flex-wrap justify-center gap-2 text-lg text-gray-800">
+        {skillsData.map((skill, index) => (
+          <motion.li
+            className="bg-white borderBlack rounded-xl px-5 py-3 dark:bg-white/10 dark:text-white/80"
+            key={index}
+            variants={fadeInAnimationVariants}
+            initial="initial"
+            whileInView="animate"
+            viewport={{
+              once: false,
+            }}
+            custom={index}
+          >
+            {skill}
+          </motion.li>
+        ))}
+      </ul>
+    </section>
+  );
+}
+</file>
+
+<file path="components/social-media-bar.tsx">
+import React from "react";
+import Link from "next/link";
+import {
+  FaInstagram,
+  FaWhatsapp,
+  FaGithub,
+  FaLinkedin,
+  FaTelegram,
+} from "react-icons/fa";
+import { motion } from "framer-motion";
+
+const shakeAnimationVariants = {
+  initial: {
+    opacity: 0,
+    x: 0,
+  },
+  animate: (index: number) => ({
+    opacity: 1,
+    x: [0, -10, 10, -10, 10, -5, 5, -2, 2, 0],
+    transition: {
+      delay: 0.05 * index,
+      duration: 0.5,
+      ease: "easeInOut",
+      // no repeat
+      repeat: 0,
+    },
+  }),
+};
+
+export default function SocialMediaBar() {
+  return (
+    <motion.ul className="flex justify-center gap-4 mt-4">
+      {[1, 2, 3, 4, 5].map(index => (
+        <motion.li
+          key={index}
+          variants={shakeAnimationVariants}
+          custom={index}
+          initial="initial"
+          whileInView="animate"
+          transition={{ delay: 0.05 * index }}
+          viewport={{ once: false }}
+        >
+          <LinkComponent index={index} />
+        </motion.li>
+      ))}
+    </motion.ul>
+  );
+}
+
+function LinkComponent({ index }: { index: number }) {
+  const links = [
+    { href: "https://www.instagram.com/alexabolada/", icon: <FaInstagram />, title: "Instagram", aria: "Instagram" },
+    { href: "https://wa.me/5522999780978", icon: <FaWhatsapp />, title: "Whatsapp", aria: "Whatsapp" },
+    { href: "https://github.com/fberbert", icon: <FaGithub />, title: "GitHub", aria: "GitHub" },
+    { href: "https://www.linkedin.com/in/fabio-linux/", icon: <FaLinkedin />, title: "LinkedIn", aria: "LinkedIn" },
+    { href: "https://t.me/vivaolinux", icon: <FaTelegram />, title: "Telegram", aria: "Telegram" },
+  ];
+
+  const { href, icon, title, aria } = links[index - 1];
+
+  return (
+    <Link
+      href={href}
+      className="text-3xl text-gray-700 dark:text-white/80 hover:text-gray-900 dark:hover:text-white"
+      title={title}
+      aria-label={aria}
+      target="_blank"
+    >
+      {icon}
+    </Link>
+  );
+}
+</file>
+
+<file path="components/experience.tsx">
+"use client";
+
+import React from "react";
+import SectionHeading from "./section-heading";
+import {
+  VerticalTimeline,
+  VerticalTimelineElement,
+} from "react-vertical-timeline-component";
+import "react-vertical-timeline-component/style.min.css";
+import { translations } from "@/lib/translations";
+import { useSectionInView } from "@/lib/hooks";
+import { useTheme } from "@/context/theme-context";
+import { useLang } from "@/context/language-context";
+
+type ExperiencesData = {
+  title: string;
+  location: string;
+  description: string;
+  icon: JSX.Element;
+  date: string;
+};
+
+export default function Experience() {
+  const { t, lang } = useLang();
+  const { ref, inView } = useSectionInView("#experience", 0.2);
+  const { theme } = useTheme();
+
+  const experiencesData = translations[lang].experiencesData;
+
+  if (!experiencesData) return null;
+
+  return (
+    <section id="experience" ref={ref} className="scroll-mt-28 mb-28 sm:mb-40">
+      <SectionHeading>{t("section.experience")}</SectionHeading>
+      <VerticalTimeline lineColor="">
+        {Object.values(experiencesData).map((item: ExperiencesData, index: number) => (
+          <React.Fragment key={index}>
+            <VerticalTimelineElement
+              visible={inView}
+              contentStyle={{
+                background:
+                  theme === "light" ? "#f3f4f6" : "rgba(255, 255, 255, 0.05)",
+                boxShadow: "none",
+                border: "1px solid rgba(0, 0, 0, 0.05)",
+                textAlign: "left",
+                padding: "1.3rem 2rem",
+              }}
+              contentArrowStyle={{
+                borderRight:
+                  theme === "light"
+                    ? "0.4rem solid #9ca3af"
+                    : "0.4rem solid rgba(255, 255, 255, 0.5)",
+              }}
+              date={item.date}
+              icon={item.icon}
+              iconStyle={{
+                background:
+                  theme === "light" ? "white" : "rgba(255, 255, 255, 0.15)",
+                fontSize: "1.5rem",
+              }}
+            >
+              <h3 className="font-semibold capitalize">{item.title}</h3>
+              <p className="font-normal !mt-0">{item.location}</p>
+              <p className="!mt-1 !font-normal text-gray-700 dark:text-white/75">
+                {item.description}
+              </p>
+            </VerticalTimelineElement>
+          </React.Fragment>
+        ))}
+      </VerticalTimeline>
+    </section>
+  );
+}
+</file>
+
+<file path="components/footer.tsx">
+// footer.tsx
+"use client";
+
+import React from "react";
+import { useLang } from "@/context/language-context";
+import { translations } from "@/lib/translations";
+
+export default function Footer() {
+  const { lang } = useLang();
+  const footer = translations[lang].footer;
+
+  return (
+    <footer className="mb-10 px-4 text-center dark:text-gray-500 text-gray-700">
+      <small className="mb-2 block text-sm">
+        {footer?.rights.replace(
+          "{{YEAR}}",
+          new Date().getFullYear().toString(),
+        )}
+      </small>
+      <p className="text-sm sm:max-w-[50%] sm:mx-auto">
+        <span className="font-semibold">{footer?.about.split(/:/)[0]}</span>:{" "}
+        {footer?.about.split(/:/)[1]}
+      </p>
+
+      <p className="text-sm sm:max-w-[50%] sm:mx-auto mt-2">
+       {footer?.github} <a
+          href="https://github.com/fberbert/mestrefabio-portfolio"
+          target="_blank"
+          className="underline"
+          aria-label="GitHub"
+        >
+          GitHub
+        </a>.
+      </p>
+    </footer>
+  );
+}
+</file>
+
+<file path="components/intro.tsx">
+"use client";
+
+import Image from "next/image";
+import React, { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { useSectionInView } from "@/lib/hooks";
+import Typed from "typed.js";
+import { useLang } from "@/context/language-context";
+
+export default function Intro() {
+  const { t } = useLang();
+  const { ref } = useSectionInView("#home", 0.5);
+  const typedRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    const yearsOfExperience = new Date().getFullYear() - 2000;
+    const typed = new Typed(typedRef.current!, {
+      strings: t(`intro.typed`).replace("{{YEARS}}", yearsOfExperience.toString()).split("\n"),
+      typeSpeed: 50,
+      backSpeed: 25,
+      backDelay: 5000,
+      loop: true,
+    });
+
+    return () => {
+      typed.destroy();
+    };
+  }, [t]);
+
+  return (
+    <section
+      ref={ref}
+      id="home"
+      className="mb-4 max-w-[50rem] text-center sm:mb-0 scroll-mt-[100rem]"
+    >
+      <div className="flex items-center justify-center">
+        <div className="relative">
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{
+              type: "tween",
+              duration: 0.2,
+            }}
+          >
+            <Image
+              src="/img/profile-picture2.jpg"
+              alt="Fábio portrait"
+              width="192"
+              height="192"
+              quality="95"
+              priority={true}
+              className="h-24 w-24 rounded-full object-cover border-[0.35rem] border-white shadow-xl"
+            />
+          </motion.div>
+
+          <motion.span
+            className="absolute bottom-0 right-[-25px] text-2xl"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1, scaleX: -1 }}
+            transition={{
+              type: "spring",
+              stiffness: 125,
+              delay: 0.1,
+              duration: 0.7,
+            }}
+          >
+            👋
+          </motion.span>
+        </div>
+      </div>
+
+      <motion.h1
+        className="mb-10 mt-4 px-4 text-2xl font-medium !leading-[1.5] sm:text-4xl min-h-[196px]"
+        initial={{ opacity: 0, y: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+      >
+        <span ref={typedRef}></span>
+      </motion.h1>
+    </section>
+  );
+}
+</file>
+
+<file path="app/layout.tsx">
+// layout.tsx
+import Header from "@/components/header";
+import "./globals.css";
+import { Inter } from "next/font/google";
+import ActiveSectionContextProvider from "@/context/active-section-context";
+import BackgroundVideo from "@/components/background-video";
+import Footer from "@/components/footer";
+import ScrollToTop from "@/components/scroll-to-top";
+import ThemeSwitch from "@/components/theme-switch";
+import ThemeContextProvider from "@/context/theme-context";
+import LanguageContextProvider from "@/context/language-context";
+import { Toaster } from "react-hot-toast";
+
+const inter = Inter({ subsets: ["latin"] });
+
+const exp = new Date().getFullYear() - 2000;
+export const metadata = {
+  title: "Mestre Fábio | Personal Portfolio",
+  description: `Fábio is a full-stack developer with ${exp} years of experience. Bring me your ideas and I'll bring them to life!`,
+  icons: {
+    icon: "/favicon.ico",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // original: #fbe2e3 | #946263 | #dbd7fb | #676394
+  // new bases: #1B1A55 | #070F2B | #9290C3 | #535C91
+  //
+
+  return (
+    <html lang="en" className="!scroll-smooth">
+      <body
+        className={`${inter.className} bg-gray-50 text-gray-950 relative pt-28 sm:pt-36 dark:bg-gray-900 dark:text-gray-50 dark:text-opacity-90`}
+      >
+        <div className="bg-[#1B1A55] absolute top-[-6rem] -z-10 right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] dark:bg-[#070F2B]"></div>
+        <div className="bg-[#9290C3] absolute top-[-1rem] -z-10 left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] dark:bg-[#535C91]"></div>
+
+        <ThemeContextProvider>
+          <LanguageContextProvider>
+            <ActiveSectionContextProvider>
+              <BackgroundVideo />
+              <Header />
+              {children}
+              <Footer />
+
+              <Toaster position="top-right" />
+              <div className="fixed bottom-5 right-5 flex space-y-2 flex-col sm:flex-col">
+                <ScrollToTop />
+                <ThemeSwitch />
+              </div>
+            </ActiveSectionContextProvider>
+          </LanguageContextProvider>
+        </ThemeContextProvider>
+      </body>
+    </html>
+  );
+}
+</file>
+
+<file path="components/contact.tsx">
+"use client";
+
+import React from "react";
+import SectionHeading from "./section-heading";
+import { motion } from "framer-motion";
+import { useSectionInView } from "@/lib/hooks";
+import { sendEmail } from "@/actions/sendEmail";
+import SocialMediaBar from "./social-media-bar";
+import toast from "react-hot-toast";
+import { useLang } from "@/context/language-context";
+import { FaPaperPlane } from "react-icons/fa";
+import { useFormStatus } from "react-dom";
+
+export default function Contact() {
+  const { t } = useLang();
+  const { ref } = useSectionInView("#contact");
+  const { pending } = useFormStatus();
+
+  return (
+    <motion.section
+      id="contact"
+      ref={ref}
+      className="mb-20 sm:mb-28 w-[min(100%,38rem)] text-center"
+      initial={{
+        opacity: 0,
+      }}
+      whileInView={{
+        opacity: 1,
+      }}
+      transition={{
+        duration: 1,
+      }}
+      viewport={{
+        once: false,
+      }}
+    >
+      <SectionHeading>{t("section.contact")}</SectionHeading>
+
+      <p
+        className="text-gray-700 -mt-6 dark:text-white/80"
+        dangerouslySetInnerHTML={{ __html: t("contact.description") }}
+      />
+
+      <form
+        className="mt-10 flex flex-col dark:text-black"
+        action={async (formData) => {
+          const { data, error } = await sendEmail(formData);
+
+          if (error) {
+            toast.error(error);
+            return;
+          }
+
+          toast.success("Email sent successfully!");
+          // clear form fields
+          const form = document.querySelector("form");
+          if (form) form.reset();
+        }}
+      >
+        <input
+          className="h-14 px-4 rounded-lg borderBlack dark:bg-white dark:bg-opacity-80 dark:focus:bg-opacity-100 transition-all dark:outline-none"
+          name="senderEmail"
+          type="email"
+          required
+          maxLength={500}
+          placeholder={t("contact.email")}
+        />
+        <textarea
+          className="h-52 my-3 rounded-lg borderBlack p-4 dark:bg-white dark:bg-opacity-80 dark:focus:bg-opacity-100 transition-all dark:outline-none"
+          name="message"
+          placeholder={t("contact.message")}
+          required
+          maxLength={5000}
+        />
+        <button
+          type="submit"
+          className="group flex items-center justify-center gap-2 h-[3rem] w-auto bg-gray-900 text-white rounded-full outline-none transition-all focus:scale-110 hover:bg-gray-950 active:scale-105 dark:bg-white dark:bg-opacity-10 disabled:scale-100 disabled:bg-opacity-65 hover:bg-black dark:hover:bg-opacity-20"
+          disabled={pending}
+        >
+          {pending ? (
+            <div className="h-5 w-5 animate-spin rounded-full border-b-2 border-white"></div>
+          ) : (
+            <>
+              {t("contact.submit")}{" "}
+              <FaPaperPlane className="text-xs opacity-70 transition-all" />{" "}
+            </>
+          )}
+        </button>
+      </form>
+
+      <p className="text-gray-700 dark:text-white/80 mt-4">
+        {t("contact.footer")}
+      </p>
+
+      <SocialMediaBar />
+    </motion.section>
+  );
+}
+</file>
+
+<file path="components/header.tsx">
+// header.tsx
+"use client";
+
+import React from "react";
+import { motion } from "framer-motion";
+import Link from "next/link";
+import clsx from "clsx";
+import LanguageSwitch from "@/components/language-switch";
+import { useActiveSectionContext } from "@/context/active-section-context";
+import { useLang } from "@/context/language-context";
+import { translations } from "@/lib/translations";
+
+type Link = {
+  name: string;
+  hash: string;
+};
+
+export default function Header() {
+  const { lang } = useLang();
+  const { activeSection, setActiveSection, setTimeOfLastClick } =
+    useActiveSectionContext();
+
+  const header = translations[lang].header;
+  const links = header?.links;
+
+  if (!links) return null;
+
+  return (
+    <header className="z-[999] relative">
+      <motion.div
+        className="fixed top-0 left-1/2 h-[4.5rem] sm:h-[3.5rem] w-full rounded-none border border-white border-opacity-40 bg-white bg-opacity-90 shadow-lg shadow-black/[0.03] backdrop-blur-[0.5rem] dark:bg-gray-950 dark:border-black/40 dark:bg-opacity-75"
+        initial={{ y: -100, x: "-50%", opacity: 0 }}
+        animate={{ y: 0, x: "-50%", opacity: 1 }}
+      ></motion.div>
+
+      <nav className="flex fixed top-[0.15rem] left-1/2 h-12 -translate-x-1/2 py-2">
+        <ul className="flex w-[22rem] flex-wrap items-center justify-center gap-y-1 text-[0.9rem] font-medium text-black sm:w-[initial] sm:flex-nowrap sm:gap-5">
+          {links.map((link: Link) => (
+            <motion.li
+              className="h-3/4 flex items-center justify-center relative"
+              key={link.hash}
+              initial={{ y: -100, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+            >
+              <Link
+                className={clsx(
+                  "flex w-full items-center justify-center px-3 py-3 transition dark:text-gray-500 dark:hover:text-gray-300",
+                  activeSection === link.hash
+                    ? "text-black dark:text-gray-200"
+                    : "hover:text-gray-950",
+                )}
+                href={link.hash}
+                onClick={() => {
+                  setActiveSection(link.hash);
+                  setTimeOfLastClick(Date.now());
+                }}
+              >
+                {link.name}
+
+                {link.hash === activeSection && (
+                  <motion.span
+                    className="bg-gray-200 rounded-full absolute inset-0 -z-10 dark:bg-gray-800"
+                    layoutId="activeSection"
+                    transition={{
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 30,
+                    }}
+                  ></motion.span>
+                )}
+              </Link>
+            </motion.li>
+          ))}
+        </ul>
+      </nav>
+      <LanguageSwitch />
+    </header>
+  );
+}
+</file>
+
+<file path="components/project.tsx">
+// project.tsx
+"use client";
+
+import { useRef, useState } from "react";
+import Image, { StaticImageData } from "next/image";
+import { motion, useScroll, useTransform } from "framer-motion";
+import React from "react";
+import { useLang } from "@/context/language-context";
+import VideoOfProject from "./video-of-project";
+
+type ProjectData = {
+  title: string;
+  description: string;
+  tags: string[];
+  imageUrl?: StaticImageData;
+  video?: string;
+  url?: string;
+};
+
+export default function Project({
+  title,
+  description,
+  tags,
+  imageUrl,
+  video,
+  url,
+}: ProjectData) {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["0 1", "1.33 1"],
+  });
+  const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
+  const opacityProgress = useTransform(scrollYProgress, [0, 1], [0.6, 1]);
+
+  const [isVideoExpanded, setIsVideoExpanded] = useState(false);
+  const { t } = useLang();
+
+  return (
+    <motion.div
+      ref={ref}
+      style={{
+        scale: scaleProgress,
+        opacity: opacityProgress,
+      }}
+      className="group mb-3 sm:mb-8 last:mb-0"
+    >
+      <section className="bg-white max-w-[42rem] border border-black/5 rounded-lg overflow-hidden relative hover:bg-gray-100 transition dark:text-white dark:bg-white/10 dark:hover:bg-white/20">
+        {/* Container Flex */}
+        <div
+          className={`flex flex-col sm:flex-row ${video ? "sm:min-h-[33rem]" : ""}`}
+        >
+          {/* Conteúdo */}
+          <div className="pt-4 pb-0 px-5 sm:pl-10 sm:pr-5 sm:pt-10 flex flex-col sm:w-1/2">
+            <h3 className="text-2xl font-semibold">{title}</h3>
+            <p className="mt-2 mb-4 leading-relaxed text-black dark:text-white/70">
+              {description}
+            </p>
+            <ul className="flex flex-wrap mt-4 gap-2">
+              {tags.map((tag: string, index: number) => (
+                <li
+                  className="bg-black/[0.9] px-3 py-1 text-[0.7rem] uppercase tracking-wider text-white rounded-full dark:text-white/70"
+                  key={index}
+                >
+                  {tag}
+                </li>
+              ))}
+            </ul>
+            <div className="flex flex-row text-center p-4 mt-4 mb-1 justify-center gap-3">
+              <a
+                href={url}
+                className="text-sm font-semibold hover:no-underline dark:bg-blue-900 px-4 py-2 rounded-md dark:text-blue-100 dark:hover:bg-blue-800 transition text-black"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {t("project.visitProject")}
+              </a>
+              {/* Botão "Expand Video" e vídeo para dispositivos móveis */}
+              {video && (
+                <div className="sm:hidden text-center">
+                  <button
+                    onClick={() => setIsVideoExpanded(!isVideoExpanded)}
+                    className="text-sm font-semibold hover:no-underline dark:bg-blue-900 px-4 py-2 rounded-md dark:text-blue-100 dark:hover:bg-blue-800 transition text-black"
+                  >
+                    {isVideoExpanded
+                      ? t("project.hideVideo")
+                      : t("project.expandVideo")}
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Vídeo/Imagem */}
+          <div className="sm:w-1/2 flex items-center justify-center sm:p-4">
+            {video ? (
+              <>
+                {/* Vídeo para telas grandes */}
+                <div className="hidden sm:block w-full">
+                  <VideoOfProject src={video} />
+                </div>
+                {isVideoExpanded && (
+                  <div className="mt-0">
+                    <VideoOfProject src={video} />
+                  </div>
+                )}
+              </>
+            ) : imageUrl ? (
+              // Renderizar imagem se não houver VideoComponent
+              <div className="hidden sm:block w-full">
+                <Image
+                  src={imageUrl}
+                  alt={`Imagem do projeto ${title}`}
+                  quality={95}
+                  className="absolute hidden sm:block top-8 -right-40 w-[28.25rem] rounded-t-lg shadow-2xl transition group-hover:scale-[1.04] group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2"
+                />
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </section>
+    </motion.div>
+  );
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "PORT=3010 next dev",
+    "build": "next build",
+    "start": "PORT=3010 next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-email/components": "^0.0.7",
+    "@react-email/tailwind": "^0.0.8",
+    "@types/node": "20.3.2",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "10.4.14",
+    "clsx": "^1.2.1",
+    "country-flag-icons": "^1.5.13",
+    "eslint": "8.43.0",
+    "eslint-config-next": "^14.2.3",
+    "framer-motion": "^10.12.17",
+    "next": "^14.2.3",
+    "postcss": "8.4.24",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^4.10.1",
+    "react-intersection-observer": "^9.5.2",
+    "react-vertical-timeline-component": "^3.6.0",
+    "resend": "^0.16.0",
+    "sharp": "^0.33.3",
+    "tailwindcss": "3.3.2",
+    "typed.js": "^2.1.0",
+    "typescript": "5.1.5"
+  },
+  "devDependencies": {
+    "@types/react-vertical-timeline-component": "^3.3.3"
+  }
+}
+</file>
+
+<file path="components/about.tsx">
+// about.tsx
+"use client";
+
+import React from "react";
+import { FaRegCheckSquare } from "react-icons/fa";
+import SectionHeading from "./section-heading";
+import { motion } from "framer-motion";
+import { useSectionInView } from "@/lib/hooks";
+import MusicVideo from "./music-video";
+import { useLang } from "@/context/language-context";
+
+const fadeInAnimationVariants = {
+  initial: {
+    opacity: 0,
+    y: 100,
+  },
+  animate: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: 0.05 * index,
+    },
+  }),
+};
+
+const lastItemVariants = {
+  initial: {
+    opacity: 0,
+  },
+  animate: {
+    opacity: 1,
+    transition: {
+      duration: 3,
+    },
+  },
+};
+
+export default function About() {
+  const { t } = useLang();
+  const { ref } = useSectionInView("#about", 0.2);
+
+  return (
+    <motion.section
+      ref={ref}
+      className="mb-28 max-w-[45rem] text-left leading-8 sm:mb-40 scroll-mt-28"
+      initial={{ opacity: 0, y: 100 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 1 }}
+      viewport={{
+        once: false,
+      }}
+      id="about"
+    >
+      <SectionHeading>{t("section.about")}</SectionHeading>
+      <p className="mb-7 text-center sm:text-justify text-lg sm:text-2xl">
+        {t("about.description")}
+      </p>
+
+      <p className="mb-7 text-center sm:text-justify text-lg sm:text-2xl">
+        {t("about.phrase1")}
+      </p>
+
+      <ul className="sm:mb-3 sm:ml-9 list-none border-0 border-white border-opacity-60 dark:border-gray-900 rounded-md">
+        {[
+          t("about.stuff1"),
+          t("about.stuff2"),
+          t("about.stuff3"),
+          t("about.stuff4"),
+          t("about.stuff5"),
+          t("about.stuff6"),
+          t("about.stuff7"),
+          t("about.stuff8"),
+        ].map((item, index) => (
+          <motion.li
+            key={index}
+            className="p-4 py-8 bg-white bg-opacity-10 dark:bg-gray-900 dark:bg-opacity-0"
+            variants={fadeInAnimationVariants}
+            initial="initial"
+            whileInView="animate"
+            viewport={{
+              once: false,
+            }}
+            custom={index + 1}
+          >
+            <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+            {item}
+          </motion.li>
+        ))}
+      </ul>
+
+      <p>{t("about.phrase2")}</p>
+      <MusicVideo />
+
+      <p className="mt-4 mb-1">{t("about.creationsTitle")}</p>
+
+      <ul className="sm:mb-3 sm:ml-9 list-none border-0 border-white border-opacity-60 dark:border-gray-900 rounded-md">
+        <motion.li
+          className="bg-white bg-opacity-0 dark:bg-gray-900 p-4 py-8 dark:bg-opacity-30"
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: false,
+          }}
+          custom={1}
+        >
+          <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+          {t("about.vivaLinuxDesc")}
+        </motion.li>
+
+        <motion.li
+          className="p-4 py-8 bg-white bg-opacity-10 dark:bg-gray-900 dark:bg-opacity-0"
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: false,
+          }}
+          custom={2}
+        >
+          <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+          {t("about.automatizandoDesc")}
+        </motion.li>
+        <motion.li
+          className="bg-white bg-opacity-0 dark:bg-gray-900 p-4 py-8 dark:bg-opacity-30"
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: false,
+          }}
+          custom={3}
+        >
+          <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+          {t("about.talkingToyDesc")}
+        </motion.li>
+        <motion.li
+          className="p-4 py-8 bg-white bg-opacity-10 dark:bg-gray-900 dark:bg-opacity-0"
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: false,
+          }}
+          custom={4}
+        >
+          <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+          {t("about.abrirGaragemDesc")}
+        </motion.li>
+        <motion.li
+          className="bg-white bg-opacity-0 dark:bg-gray-900 p-4 py-8 dark:bg-opacity-30"
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: false,
+          }}
+          custom={5}
+        >
+          <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+          {t("about.alexaboladaDesc")}
+        </motion.li>
+        <motion.li
+          className="p-4 py-8 bg-white bg-opacity-10 dark:bg-gray-900 dark:bg-opacity-0"
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: false,
+          }}
+          custom={6}
+        >
+          <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+          {t("about.cryptoDesc")}
+        </motion.li>
+        <motion.li
+          className="bg-white bg-opacity-0 dark:bg-gray-900 p-4 py-8 dark:bg-opacity-30"
+          variants={fadeInAnimationVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: false,
+          }}
+          custom={7}
+        >
+          <FaRegCheckSquare className="inline mr-2 text-blue-700 dark:text-blue-900" />{" "}
+          {t("about.openSourceDesc")}
+        </motion.li>
+        <motion.li
+          className="mt-6 mb-3 text-base text-center bg-blue-900 text-white dark:bg-white/10 p-3 rounded-md py-4"
+          variants={lastItemVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{
+            once: false,
+          }}
+        >
+          {t("about.position")}
+        </motion.li>
+      </ul>
+    </motion.section>
+  );
+}
+</file>
+
+<file path="README.md">
+# mestrefabio.com
+
+## About
+
+This portfolio website is built with cutting-edge technologies, including:
+- The latest features of Next.js 14
+- Next.js App Router and Server Actions
+- A mix of Client and Server Components
+- TypeScript for both beginners and intermediate developers
+- Styling with Tailwind CSS
+- State management using Context API
+- Advanced animations powered by Framer Motion
+- Dynamic typing effects with Typed.js
+- Email functionality through React.Email & Resend
+- Custom React hooks for enhanced functionality
+- A fresh and modern UI design
+- Support for Light & Dark modes
+- Fully responsive design for all devices
+
+You are welcome to clone, copy, and use this code for your projects.
+
+Live demo here: [https://mestrefabio.com](https://mestrefabio.com)
+
+## Screenshots
+
+![Intro section](public/img/screens/intro.jpg "Intro section")
+
+![Projects section](public/img/screens/projects.jpg "Projects section")
+
+![Experience section](public/img/screens/experience.jpg "Experience section")
+
+![Light mode theme](public/img/screens/light-mode.jpg "Light mode theme")
+
+
+## Setup
+
+To set up this project for personal use, follow these steps:
+
+1. Obtain an API key for email sending functionality at [Resend.com](https://resend.com).
+2. Create a `.env.local` file in the root folder of your repository and add your RESEND_API_KEY.
+3. Modify the "to" email address in the `sendEmail.ts` action file to your preferred email.
+
+## Reference
+
+This repository draws inspiration from ByteGrad's portfolio project, available at: [https://github.com/ByteGrad/portfolio-website](https://github.com/ByteGrad/portfolio-website).
+</file>
+
+</files>

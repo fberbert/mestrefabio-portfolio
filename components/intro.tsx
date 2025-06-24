@@ -44,7 +44,7 @@ export default function Intro() {
             }}
           >
             <Image
-              src="/img/profile-picture2.jpg"
+              src="/img/profile-picture3.jpg"
               alt="Fábio portrait"
               width="192"
               height="192"
