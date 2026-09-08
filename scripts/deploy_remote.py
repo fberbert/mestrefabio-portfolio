@@ -103,7 +103,7 @@ def start_process(root, cwd, name, port, node):
     baseline = Path(__file__).resolve().parents[1] / 'ecosystem.config.cjs'
     specification = json.loads(run([str(node), '-e', 'process.stdout.write(JSON.stringify(require(process.argv[1])))', str(baseline)]))
     app = {**specification['apps'][0], 'name': name, 'cwd': str(cwd),
-           'args': ['start', '-p', str(port)], 'interpreter': str(node),
+           'args': ['start', '-p', str(port), '--hostname', '127.0.0.1'], 'interpreter': str(node),
            'env': {'NODE_ENV': 'production', 'PORT': str(port)}}
     config.write_text('module.exports = ' + json.dumps({'apps': [app]}) + ';\n')
     config.chmod(0o600)

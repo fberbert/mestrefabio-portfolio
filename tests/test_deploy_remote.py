@@ -136,6 +136,8 @@ class RemoteTests(unittest.TestCase):
             if args[1] == 'start':
                 self.assertIn('"interpreter": "/node"', Path(args[2]).read_text())
                 self.assertIn(str(self.release), Path(args[2]).read_text())
+                config = json.loads(Path(args[2]).read_text().removeprefix('module.exports = ').removesuffix(';\n'))
+                self.assertEqual(config['apps'][0]['args'], ['start', '-p', '3100', '--hostname', '127.0.0.1'])
             return ''
         with patch.object(r, 'run', side_effect=command), patch.object(r, 'process_info', return_value={'status': 'online'}):
             r.start_process(self.root, self.release, 'test', 3100, Path('/node'))

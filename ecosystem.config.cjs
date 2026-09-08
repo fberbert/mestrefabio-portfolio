@@ -5,7 +5,7 @@ module.exports = {
     name: 'mestrefabio',
     cwd: '/home/fabio/apps/mestrefabio/current',
     script: 'node_modules/next/dist/bin/next',
-    args: ['start', '-p', '3010'],
+    args: ['start', '-p', '3010', '--hostname', '127.0.0.1'],
     interpreter: '/usr/bin/node',
     env: { NODE_ENV: 'production', PORT: '3010' },
   }],

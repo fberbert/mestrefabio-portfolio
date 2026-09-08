@@ -51,9 +51,9 @@ Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados
 
 ## Credencial exposta na consulta operacional
 
-- [ ] **Alta — Revogar e substituir a chave exibida pelo PM2.** A consulta `pm2 describe` exibiu inesperadamente uma variável `OPENAI_API_KEY` herdada pelo processo. Não registrar o valor neste documento, no repositório ou em novos logs. A alteração da credencial deve ocorrer em uma ação explicitamente autorizada.
+- [ ] **Alta — Revogar e substituir a chave exibida pelo PM2.** A consulta `pm2 describe` exibiu inesperadamente uma variável `OPENAI_API_KEY` herdada pelo processo. Não registrar o valor neste documento, no repositório ou em novos logs. A correção foi autorizada. A chave identificada já retorna **401 / invalid_api_key**; não foi revogada por esta manutenção. **Pendente:** acesso ao painel da organização para revisar uso e confirmar/substituir consumidores legítimos. A chave antiga ainda aparece em quatro outros processos; veja [security-operations.md](security-operations.md).
   - Validação: a chave antiga está revogada; consumidores legítimos, se houver, usam a substituta; revisar uso inesperado no período da exposição.
-- [ ] **Alta — Reduzir exposição de segredos em diagnósticos.** Revisar a necessidade dessa variável no processo do portfólio e preferir consultas que selecionem apenas campos operacionais permitidos, sem imprimir o ambiente completo. Revisar o acesso ao registro que recebeu a saída.
+- [x] **Alta — Reduzir exposição de segredos em diagnósticos.** Processo do portfólio confirmado sem chave OpenAI. Helper `scripts/diagnose.py` filtra dados nos dois lados do SSH, com 9 testes. Diretório PM2 0700, dumps 0600 e registro local da exposição 0600. Limites sobre cópias externas e operação: [security-operations.md](security-operations.md).
   - Validação: diagnósticos de nome, status e diretório do processo não exibem credenciais.
 
 ## Validação da manutenção — 8 de setembro de 2026

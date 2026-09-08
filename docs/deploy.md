@@ -116,6 +116,8 @@ A recuperação exige que release, raiz, nome e porta correspondam ao journal. U
 
 ## Diagnóstico sem segredos
 
+Use `python3 scripts/diagnose.py --host two` para uma consulta filtrada nos dois lados do SSH. Proteções do proxy, permissões e tratamento de incidentes: [security-operations.md](security-operations.md). O runtime passa a escutar em `127.0.0.1:3010`; o acesso público é feito pelo Nginx.
+
 Evite `pm2 describe`, `pm2 env` e saída bruta de `pm2 jlist`, pois podem mostrar variáveis sensíveis. O helper consulta PM2 internamente e seleciona somente status e diretório; não imprime o ambiente nem a saída capturada de comandos que falham. Uma falha informa a etapa ou a categoria do erro. Investigue logs da aplicação apenas com cuidado para não reproduzir credenciais ou dados pessoais.
 
 ## Verificação local da implementação
