@@ -6,41 +6,58 @@
     "dev": "PORT=3010 next dev",
     "build": "next build",
     "start": "PORT=3010 next start",
-    "lint": "next lint",
+    "lint": "eslint app components context actions email lib --max-warnings=0",
     "test:deploy": "python3 -m unittest discover -s tests -p \"test_*.py\"",
-    "test:deploy:e2e": "python3 tests/e2e_deploy.py"
+    "test:deploy:e2e": "python3 tests/e2e_deploy.py",
+    "typecheck": "tsc --noEmit --incremental false",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "npm run build:test && playwright test",
+    "build:test": "RESEND_API_KEY=re_browser_test_dummy NEXT_TELEMETRY_DISABLED=1 next build"
   },
   "dependencies": {
     "@react-email/components": "^1.0.1",
     "@react-email/render": "^2.0.0",
     "@react-email/tailwind": "^2.0.1",
-    "@types/node": "20.3.2",
-    "@types/react": "^18.3.0",
-    "@types/react-dom": "^18.3.0",
-    "autoprefixer": "10.4.14",
     "clsx": "^1.2.1",
     "country-flag-icons": "^1.5.13",
-    "eslint": "8.43.0",
-    "eslint-config-next": "^14.2.3",
-    "framer-motion": "^10.12.17",
-    "next": "^14.2.3",
-    "postcss": "8.4.24",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "framer-motion": "^13.2.0",
+    "next": "15.5.25",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "react-hot-toast": "^2.4.1",
-    "react-icons": "^4.10.1",
+    "react-icons": "^5.6.0",
     "react-intersection-observer": "^9.5.2",
-    "react-vertical-timeline-component": "^3.6.0",
-    "resend": "^6.5.2",
-    "sharp": "^0.33.3",
-    "tailwindcss": "3.3.2",
+    "react-vertical-timeline-component": "^4.0.0",
+    "resend": "^6.26.0",
+    "sharp": "^0.35.4",
     "typed.js": "^2.1.0",
-    "typescript": "5.1.5"
+    "zod": "^4.0.0"
   },
   "devDependencies": {
-    "@types/react-vertical-timeline-component": "^3.3.3"
+    "@types/react-vertical-timeline-component": "^3.3.3",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "15.5.25",
+    "postcss": "^8.5.28",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.9.3",
+    "@eslint/eslintrc": "^3.3.0",
+    "vitest": "5.0.0",
+    "@vitest/coverage-v8": "5.0.0",
+    "jsdom": "^28.0.0",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/jest-dom": "^6.0.0",
+    "@testing-library/user-event": "^14.0.0",
+    "@playwright/test": "1.63.0"
   },
   "engines": {
     "node": "22.21.0"
+  },
+  "overrides": {
+    "postcss": "^8.5.28"
   }
 }

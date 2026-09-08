@@ -39,3 +39,7 @@ next-env.d.ts
 # Python deployment tests
 __pycache__/
 .coverage
+
+# Browser test artifacts
+/playwright-report/
+/test-results/

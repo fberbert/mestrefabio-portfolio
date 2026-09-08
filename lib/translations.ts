@@ -107,7 +107,7 @@ export type Experience = {
   title: string;
   location: string;
   description: string;
-  icon: JSX.Element;
+  icon: React.JSX.Element;
   date: string;
 };
 
@@ -118,6 +118,10 @@ export type Contact = {
   email: string;
   message: string;
   submit: string;
+  success: string;
+  validation: string;
+  rate_limit: string;
+  delivery: string;
   footer: string;
 };
 
@@ -391,6 +395,10 @@ export const translations: Translations = {
       email: "Your email",
       message: "Your message",
       submit: "Send message",
+      success: "Email sent successfully!",
+      validation: "Enter a valid email and a message of up to 5,000 characters.",
+      rate_limit: "Too many attempts. Please try again in 10 minutes.",
+      delivery: "Unable to send your message. Please try again later.",
       footer: "You can also reach me on social media:",
     },
     footer: {
@@ -647,6 +655,10 @@ export const translations: Translations = {
       email: "Seu email",
       message: "Sua mensagem",
       submit: "Enviar mensagem",
+      success: "Email enviado com sucesso!",
+      validation: "Informe um email válido e uma mensagem de até 5.000 caracteres.",
+      rate_limit: "Muitas tentativas. Tente novamente em 10 minutos.",
+      delivery: "Não foi possível enviar sua mensagem. Tente novamente mais tarde.",
       footer: "Você também pode me encontrar nas redes sociais:",
     },
     footer: {

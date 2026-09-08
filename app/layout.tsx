@@ -13,14 +13,7 @@ import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 
-const exp = new Date().getFullYear() - 2000;
-export const metadata = {
-  title: "Mestre Fábio | Personal Portfolio",
-  description: `Fábio is a full-stack developer with ${exp} years of experience. Bring me your ideas and I'll bring them to life!`,
-  icons: {
-    icon: "/favicon.ico",
-  },
-};
+export { metadata } from "@/lib/site-metadata";
 
 export default function RootLayout({
   children,

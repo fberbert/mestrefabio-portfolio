@@ -7,9 +7,9 @@ import {
   FaLinkedin,
   FaTelegram,
 } from "react-icons/fa";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
-const shakeAnimationVariants = {
+const shakeAnimationVariants: Variants = {
   initial: {
     opacity: 0,
     x: 0,

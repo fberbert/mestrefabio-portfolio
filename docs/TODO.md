@@ -1,6 +1,6 @@
 # Correções pendentes
 
-Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados e validados em ambiente isolado; a primeira publicação em produção foi concluída em 8 de setembro de 2026 (commit `6f24333`). Os demais itens continuam pendentes. Evidências e operação: [deploy.md](deploy.md).
+Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados e validados em ambiente isolado; a primeira publicação em produção foi concluída em 8 de setembro de 2026 (commit `6f24333`). O estado de manutenção foi revisto em 8 de setembro de 2026; veja as evidências abaixo. Evidências e operação: [deploy.md](deploy.md).
 
 ## Deploy — `~/bin/build-mestrefabio`
 
@@ -29,24 +29,24 @@ Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados
 
 ## Formulário de contato
 
-- [ ] **Alta — Tratar erros retornados pelo Resend.** Em `actions/sendEmail.ts`, examinar o campo `error` da resposta do SDK, além de exceções. Atualmente a resposta inteira fica dentro de `data`, enquanto `components/contact.tsx` verifica apenas o erro externo.
+- [x] **Alta — Tratar erros retornados pelo Resend.** A ação verifica `error`, exceções e presença de `data.id`. Somente entrega confirmada retorna sucesso; as falhas preservam os campos.
   - Validação: erro retornado pelo provedor e exceção exibem falha e preservam os campos; apenas um envio confirmado exibe sucesso e limpa o formulário.
-- [ ] **Média — Corrigir `useFormStatus`.** Mover o botão de envio para um componente descendente do `<form>` e chamar o hook nele. Atualmente o hook está no componente que renderiza o próprio formulário.
+- [x] **Média — Corrigir `useFormStatus`.** O botão agora é descendente do `<form>` e usa `useFormStatus` nesse contexto.
   - Validação: durante uma submissão pendente, o botão fica desabilitado e mostra o indicador de envio; após a conclusão, volta ao estado normal.
-- [ ] **Alta — Adicionar proteção contra abuso.** Implementar limitação no servidor e avaliar proteção anti-bot proporcional ao formulário público. Não depender apenas do bloqueio do botão no navegador.
+- [ ] **Alta — Adicionar proteção contra abuso.** Limitação no servidor implementada e testada: 3 tentativas/email e 20 globais por janela de 10 minutos, no processo atual. **Pendente:** confirmar controles do proxy e avaliar proteção anti-bot proporcional. Limites e comportamento em reinícios: [testing.md](testing.md).
   - Validação: submissões acima do limite são rejeitadas antes de chamar o Resend, sem impedir o uso normal. Confirmar também eventuais controles já existentes no proxy.
-- [ ] **Média — Fortalecer a validação no servidor.** Validar formato do email, normalizar espaços e rejeitar mensagens vazias ou compostas apenas por espaços, preservando limites de tamanho. Não confiar somente nos atributos HTML.
+- [x] **Média — Fortalecer a validação no servidor.** Validar formato do email, normalizar espaços e rejeitar mensagens vazias ou compostas apenas por espaços, preservando limites de tamanho. Não confiar somente nos atributos HTML.
   - Validação: email inválido, campos ausentes, valores que não sejam strings e conteúdo acima do limite são rejeitados sem envio.
-- [ ] **Média — Não devolver erros internos ao cliente.** Substituir o retorno direto de `getErrorMessage(error)` por uma mensagem apropriada ao usuário. Registrar detalhes úteis no servidor com remoção de segredos e dados pessoais desnecessários.
+- [x] **Média — Não devolver erros internos ao cliente.** A ação retorna códigos públicos traduzidos; logs registram somente categorias de falha de entrega, sem mensagens do provedor, emails ou credenciais.
   - Validação: respostas de falha não expõem configuração, credenciais ou detalhes internos do provedor.
 
 ## Dependências, testes e manutenção
 
-- [ ] **Alta — Analisar e corrigir vulnerabilidades de dependências.** O `npm audit --omit=dev` apontou 19 ocorrências: 13 altas, 5 moderadas e 1 baixa. Avaliar a aplicabilidade, priorizar dependências expostas em runtime e atualizar com revisão do lockfile. Não aplicar atualizações maiores automaticamente sem verificar compatibilidade.
+- [x] **Alta — Analisar e corrigir vulnerabilidades de dependências.** Atualizados Next.js 15.5.25, React 19.2.8, Resend 6.26.0 e Sharp 0.35.4, com renovação das transitivas e ajuste das ferramentas. `npm ci` e auditoria completa: **zero vulnerabilidades**, contra as 19 ocorrências iniciais. Compatibilidade verificada por build, lint, tipos e testes; ESLint 9 mantido por compatibilidade e documentado em [testing.md](testing.md).
   - Validação: repetir a auditoria após as atualizações e registrar pendências justificadas; executar TypeScript, lint, build e testes dos fluxos afetados.
-- [ ] **Média — Criar cobertura automatizada dos fluxos críticos.** Não foi encontrada suíte de testes. Cobrir validação, falhas do provedor, sucesso de envio, estado pendente, proteção contra abuso e controle de falhas do deploy, usando serviços simulados para não enviar emails nem publicar durante os testes.
+- [x] **Média — Criar cobertura automatizada dos fluxos críticos.** 26 testes Vitest de unidade/integração, 7 E2E Playwright e 54 testes Python de deploy passaram. Cobertura de 100% nos módulos críticos de contato/metadados selecionados, com limiar mínimo de 80%; os serviços de email são simulados e nenhum deploy ocorre nos testes. Comandos e escopo da métrica: [testing.md](testing.md).
   - Validação: testes unitários, de integração e E2E relevantes passam; atingir a cobertura mínima de 80% estabelecida pelas instruções do projeto.
-- [ ] **Baixa — Consolidar metadados do App Router.** Revisar `app/head.tsx` e `app/layout.tsx`, remover definições redundantes ou inertes e corrigir o erro de digitação no título legado.
+- [x] **Baixa — Consolidar metadados do App Router.** Fonte tipada única em `lib/site-metadata.ts`, usada pelo layout; removidos head legado e ícone duplicado. O navegador confirmou um título, uma descrição e um favicon funcional.
   - Validação: o HTML entregue contém título e metadados esperados, sem duplicação conflitante.
 
 ## Credencial exposta na consulta operacional
@@ -56,7 +56,15 @@ Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados
 - [ ] **Alta — Reduzir exposição de segredos em diagnósticos.** Revisar a necessidade dessa variável no processo do portfólio e preferir consultas que selecionem apenas campos operacionais permitidos, sem imprimir o ambiente completo. Revisar o acesso ao registro que recebeu a saída.
   - Validação: diagnósticos de nome, status e diretório do processo não exibem credenciais.
 
-## Evidências e limites do levantamento
+## Validação da manutenção — 8 de setembro de 2026
+
+- Instalação limpa com `npm ci`, auditoria completa zerada, lint e checagem TypeScript do build aprovados.
+- Build de produção Next.js 15.5.25 aprovado; HTML e envio pela Server Action verificados no Chrome.
+- 26 testes unitários/de integração, 7 E2E de navegador e 54 testes Python passaram. Cobertura JavaScript: 100% de linhas, funções, branches e statements nos módulos selecionados.
+- Validações locais com quota de CPU de 50% de um núcleo. Nenhum deploy executado nesta manutenção.
+- Revisão de código/segurança sem achados graves; comando E2E ajustado para sempre gerar um build novo.
+
+## Evidências históricas do levantamento inicial
 
 - TypeScript (`tsc --noEmit --incremental false`) e `npm run lint` passaram.
 - A sintaxe Bash passou; ShellCheck apontou problemas de tratamento de `cd`, expansão e aspas.

@@ -16,7 +16,7 @@ type ExperiencesData = {
   title: string;
   location: string;
   description: string;
-  icon: JSX.Element;
+  icon: React.JSX.Element;
   date: string;
 };
 
