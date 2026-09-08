@@ -34,11 +34,17 @@ Live demo here: [https://mestrefabio.com](https://mestrefabio.com)
 
 ## Setup
 
+Use Node **22.21.0**, pinned in `.nvmrc` and `.node-version`. With nvm, run `nvm install` and `nvm use`, then `npm ci`. Start development with `npm run dev`.
+
 To set up this project for personal use, follow these steps:
 
 1. Obtain an API key for email sending functionality at [Resend.com](https://resend.com).
 2. Create a `.env.local` file in the root folder of your repository and add your RESEND_API_KEY.
 3. Modify the "to" email address in the `sendEmail.ts` action file to your preferred email.
+
+## Deploy
+
+See [the deployment runbook](docs/deploy.md) for prerequisites, immutable releases, verification and rollback. The default command is `~/bin/build-mestrefabio`; `--check` validates the local snapshot without a remote connection.
 
 ## Reference
 

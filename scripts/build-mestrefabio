@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+repo_dir="${MESTREFABIO_REPO:-/home/fabio/projetos/mestrefabio-portfolio}"
+[[ -f "$repo_dir/scripts/deploy.py" ]] || { echo 'Cliente de deploy não encontrado.' >&2; exit 1; }
+exec python3 "$repo_dir/scripts/deploy.py" "$@"

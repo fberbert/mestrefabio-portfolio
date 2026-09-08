@@ -6,7 +6,9 @@
     "dev": "PORT=3010 next dev",
     "build": "next build",
     "start": "PORT=3010 next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:deploy": "python3 -m unittest discover -s tests -p \"test_*.py\"",
+    "test:deploy:e2e": "python3 tests/e2e_deploy.py"
   },
   "dependencies": {
     "@react-email/components": "^1.0.1",
@@ -37,5 +39,8 @@
   },
   "devDependencies": {
     "@types/react-vertical-timeline-component": "^3.3.3"
+  },
+  "engines": {
+    "node": "22.21.0"
   }
 }
