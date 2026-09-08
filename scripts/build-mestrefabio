@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 repo_dir="${MESTREFABIO_REPO:-/home/fabio/projetos/mestrefabio-portfolio}"
+cpu_quota="${MESTREFABIO_CPU_QUOTA-50}"
 [[ -f "$repo_dir/scripts/deploy.py" ]] || { echo 'Cliente de deploy não encontrado.' >&2; exit 1; }
-exec python3 "$repo_dir/scripts/deploy.py" "$@"
+[[ "$cpu_quota" =~ ^([1-9][0-9]?|100)$ ]] || {
+  echo 'MESTREFABIO_CPU_QUOTA deve ser um inteiro de 1 a 100, sem o sinal %.' >&2
+  exit 2
+}
+command -v systemd-run >/dev/null || {
+  echo 'systemd-run é necessário para aplicar o limite de CPU; operação interrompida.' >&2
+  exit 1
+}
+# One quota shared by the complete local process tree; no unlimited fallback.
+exec systemd-run --user --scope --quiet --expand-environment=no \
+  -p "CPUQuota=${cpu_quota}%" -p CPUWeight=10 \
+  -- nice -n 10 python3 "$repo_dir/scripts/deploy.py" "$@"

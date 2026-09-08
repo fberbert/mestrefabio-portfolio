@@ -40,6 +40,28 @@ Valide a exportação sem conexão remota:
 
 Também é possível chamar `python3 scripts/deploy.py` na raiz do repositório, com as mesmas opções. Para apontar outro destino, existem `--host`, `--root` e `--legacy-dir`; use caminhos absolutos dedicados. Esses parâmetros mudam o destino real da operação.
 
+## Limite de CPU local
+
+O launcher `~/bin/build-mestrefabio` executa toda a árvore de processos locais em um scope do systemd com `CPUQuota=50%`, `CPUWeight=10` e prioridade `nice 10`. A quota padrão equivale a **metade de um núcleo**, compartilhada por Python, Git, rsync, SSH e seus filhos; não é 50% de todos os núcleos da máquina. A quota é por execução do comando.
+
+Para reduzir o limite a um quarto de núcleo:
+
+```bash
+MESTREFABIO_CPU_QUOTA=25 ~/bin/build-mestrefabio
+```
+
+Aceita inteiros de 1 a 100, sem `%`; o padrão é 50. Um limite menor pode aumentar o tempo de preparação e transferência. É necessário systemd 254 ou superior, sessão de usuário acessível e cgroups v2 com controle de CPU. Se o gerenciador ou a configuração falhar, o comando termina com erro, sem repetir a execução sem limite. A configuração vale para novas execuções, não modifica processos já em andamento.
+
+O build Next.js ocorre no servidor; essa quota cobre somente o trabalho **local**. Ela não limita carga de outros programas nem o build remoto. Chamar `python3 scripts/deploy.py` diretamente contorna o launcher e seu limite; use `~/bin/build-mestrefabio` nas operações normais.
+
+Teste local com dois processos filhos e medição da quota real, sem rede nem deploy:
+
+```bash
+python3 tests/e2e_cpu_limit.py
+```
+
+Validação em 8 de setembro de 2026: 54 testes passaram; no teste real, dois filhos compartilharam `cpu.max=50000 100000` e consumiram juntos 2,01 segundos de CPU em 4,03 segundos de execução.
+
 ## Publicar
 
 ```bash
@@ -119,7 +141,7 @@ O launcher pessoal foi substituído pelo launcher versionado, mantendo uma cópi
 
 A instalação limpa e o build do portfólio completo passaram com Node 22.21.0 em um diretório isolado. A aplicação compilada também iniciou em PM2 isolado na porta 43110 e passou pelas verificações HTTP de página e commit. Foi usada uma chave fictícia apenas para permitir o build; não houve teste de envio de email.
 
-A suíte tem **50 testes passando**, com **91% de cobertura de linhas** dos scripts Python (99% cliente, 88% helper remoto). O teste E2E com npm, PM2 e HTTP reais passou por preparação, ativação, diretórios com espaços, falha de build, rollback automático, retorno manual, restauração de comando/ambiente legado e recuperação após `SIGKILL`. Testes de rede usam fronteiras simuladas para SSH; Git e rsync são exercitados em diretórios reais temporários.
+Na validação inicial do deploy, a suíte tinha **50 testes passando**, com **91% de cobertura de linhas** dos scripts Python (99% cliente, 88% helper remoto). O teste E2E com npm, PM2 e HTTP reais passou por preparação, ativação, diretórios com espaços, falha de build, rollback automático, retorno manual, restauração de comando/ambiente legado e recuperação após `SIGKILL`. Testes de rede usam fronteiras simuladas para SSH; Git e rsync são exercitados em diretórios reais temporários.
 
 Para medir a cobertura, instale `coverage` em um ambiente Python separado e execute:
 
