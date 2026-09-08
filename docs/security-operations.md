@@ -6,7 +6,7 @@ A proteção combina a quota da Server Action (3 tentativas/email e 20 globais p
 
 O Nginx efetivo não tinha `real_ip_header`, `set_real_ip_from` nem zonas de limitação. Na amostra dos últimos 2.000 registros de acesso havia predominância de GET e redirecionamentos, sem evidência suficiente de abuso do contato que justificasse um CAPTCHA externo. Por isso a decisão inicial é usar as duas quotas, sem acrescentar desafio visual ou dependência de terceiros. Reavaliar se houver entregas abusivas apesar dos limites. Usuários atrás do mesmo IP compartilham a quota do proxy; reiniciar Nginx limpa sua zona, enquanto reload a preserva. Mudanças futuras na cadeia de proxies exigem revisar a origem confiável do IP.
 
-O `next start` passa a escutar somente `127.0.0.1:3010`, evitando acesso direto que contorne o proxy. O helper de deploy e a configuração PM2 versionada fixam esse endereço; alterações só entram no runtime na publicação.
+O `next start` foi publicado escutando somente `127.0.0.1:3010`, evitando acesso direto que contorne o proxy. O helper de deploy e a configuração PM2 versionada fixam esse endereço; o bind foi conferido após a publicação.
 
 ## Configuração Nginx
 
@@ -41,3 +41,11 @@ A mesma credencial antiga aparece no ambiente de quatro processos externos ao po
 Não há credencial administrativa OpenAI nos ambientes consultados. A conclusão da rotação e revisão de uso exige identificar a organização/projeto no painel, confirmar a chave invalidada e, se necessário, fornecer substitutas por canal seguro aos consumidores legítimos. Não enviar valores pela conversa. Esta etapa permanece aberta no TODO; o pedido do usuário já autoriza a correção, falta acesso/contexto da conta.
 
 Referências: [limites do Nginx](https://nginx.org/en/docs/http/ngx_http_limit_req_module.html) e [administração de chaves OpenAI](https://platform.openai.com/docs/api-reference/admin-api-keys).
+
+## Publicação e verificação final
+
+Release `1a87475c4f5c8c0c8311a4c39aa85d51a9839acf-5170ab69348f` publicada em 8 de setembro de 2026, incluindo as atualizações de dependências e contato previamente validadas. PM2 online, sem chave OpenAI, bind exclusivo `127.0.0.1:3010`, sem journal de ativação pendente. Nginx validado; permissões de PM2 e dumps reconferidas após `pm2 save`.
+
+A página pública, o marcador de versão e a política responderam 200; commit público correto e política idêntica ao arquivo local. Probes POST em caminho inexistente, sem identificador de Server Action e sem envio de email, produziram `[404, 404, 404, 404, 429, 429]`; corpo de 65.537 bytes recebeu 413 e GET continuou 200.
+
+63 testes Python passaram. O E2E real de Nginx e o E2E de deploy/rollback rodaram em diretórios e processos isolados no servidor. A auditoria npm permaneceu zerada. O primeiro registro da exposição foi encontrado em 8 de setembro de 2026 às 07:48:12 UTC; revisar o histórico da conta a partir desse momento, considerando que a origem da credencial pode ser anterior. O navegador disponível exige login no painel, portanto revisão de uso/substituição continua dependente desse acesso.

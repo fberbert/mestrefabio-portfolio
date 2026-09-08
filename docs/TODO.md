@@ -33,7 +33,7 @@ Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados
   - Validação: erro retornado pelo provedor e exceção exibem falha e preservam os campos; apenas um envio confirmado exibe sucesso e limpa o formulário.
 - [x] **Média — Corrigir `useFormStatus`.** O botão agora é descendente do `<form>` e usa `useFormStatus` nesse contexto.
   - Validação: durante uma submissão pendente, o botão fica desabilitado e mostra o indicador de envio; após a conclusão, volta ao estado normal.
-- [ ] **Alta — Adicionar proteção contra abuso.** Limitação no servidor implementada e testada: 3 tentativas/email e 20 globais por janela de 10 minutos, no processo atual. **Pendente:** confirmar controles do proxy e avaliar proteção anti-bot proporcional. Limites e comportamento em reinícios: [testing.md](testing.md).
+- [x] **Alta — Adicionar proteção contra abuso.** Publicados os limites da aplicação (3 tentativas/email e 20 globais por janela de 10 minutos) e do Nginx (6 POST/minuto por IP, rajada adicional de 3, corpo de até 64 KiB). Porta 3010 restrita ao loopback. GET 200, excesso 429 e corpo grande 413 confirmados publicamente. Decisão anti-bot e limites: [security-operations.md](security-operations.md).
   - Validação: submissões acima do limite são rejeitadas antes de chamar o Resend, sem impedir o uso normal. Confirmar também eventuais controles já existentes no proxy.
 - [x] **Média — Fortalecer a validação no servidor.** Validar formato do email, normalizar espaços e rejeitar mensagens vazias ou compostas apenas por espaços, preservando limites de tamanho. Não confiar somente nos atributos HTML.
   - Validação: email inválido, campos ausentes, valores que não sejam strings e conteúdo acima do limite são rejeitados sem envio.
@@ -63,6 +63,12 @@ Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados
 - 26 testes unitários/de integração, 7 E2E de navegador e 54 testes Python passaram. Cobertura JavaScript: 100% de linhas, funções, branches e statements nos módulos selecionados.
 - Validações locais com quota de CPU de 50% de um núcleo. Nenhum deploy executado nesta manutenção.
 - Revisão de código/segurança sem achados graves; comando E2E ajustado para sempre gerar um build novo.
+
+## Conclusão operacional de segurança — 8 de setembro de 2026
+
+- Proteção contra abuso e diagnóstico seguro concluídos. Restam somente revisão de uso e eventual substituição da chave inválida nos consumidores externos, dependentes do painel OpenAI.
+- Publicado `1a87475c4f5c8c0c8311a4c39aa85d51a9839acf`, incluindo a manutenção anterior. PM2 online, sem chave OpenAI e somente em `127.0.0.1:3010`; versão pública e política conferidas.
+- 63 testes Python aprovados, E2E isolados de Nginx e deploy/rollback aprovados, auditoria npm zerada. Verificação pública de proteção: POST em excesso 429, corpo grande 413, página 200.
 
 ## Evidências históricas do levantamento inicial
 
