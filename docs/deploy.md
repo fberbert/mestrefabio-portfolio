@@ -153,3 +153,13 @@ coverage report --fail-under=80
 A auditoria de dependências continua com 19 ocorrências (13 altas, 5 moderadas e 1 baixa). A mudança do deploy não atualizou bibliotecas: o lockfile recebeu apenas o requisito da versão Node. Essas correções continuam no TODO próprio.
 
 Essas evidências são locais. Nenhuma versão foi ativada no servidor de produção durante esta implementação. A migração de produção usa o procedimento de publicação descrito acima.
+
+## Primeira publicação em produção — 8 de setembro de 2026
+
+- Commit publicado: `6f24333c16197c0eb1427ab78ae09a63976a9537`.
+- Release ativa: `6f24333c16197c0eb1427ab78ae09a63976a9537-7eae0255d1a4`.
+- Publicação pelo launcher com quota local de 50% de um núcleo; instalação, build e ativação concluídos no servidor `two`.
+- PM2 `mestrefabio` online, com diretório correspondente ao link `current`; `BUILD_ID` e marcador de preparação presentes, sem journal ou snapshot de recuperação pendente.
+- Domínio público: `/`, `/whereisluiza.html` e `/deploy-version.json` responderam HTTP 200. A identidade pública corresponde ao commit publicado, e o HTML da política corresponde integralmente ao arquivo local por SHA-256.
+
+Este registro atualiza o estado operacional após a validação local descrita anteriormente. Nenhum push Git foi necessário para a publicação.

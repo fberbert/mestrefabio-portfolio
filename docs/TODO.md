@@ -1,6 +1,6 @@
 # Correções pendentes
 
-Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados e validados em ambiente isolado; a produção ainda não foi migrada. Os demais itens continuam pendentes. Evidências e operação: [deploy.md](deploy.md).
+Levantamento de 8 de setembro de 2026. Os 11 itens de deploy foram implementados e validados em ambiente isolado; a primeira publicação em produção foi concluída em 8 de setembro de 2026 (commit `6f24333`). Os demais itens continuam pendentes. Evidências e operação: [deploy.md](deploy.md).
 
 ## Deploy — `~/bin/build-mestrefabio`
 
