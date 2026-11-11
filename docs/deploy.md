@@ -52,7 +52,7 @@ MESTREFABIO_CPU_QUOTA=25 ~/bin/build-mestrefabio
 
 Aceita inteiros de 1 a 100, sem `%`; o padrão é 50. Um limite menor pode aumentar o tempo de preparação e transferência. É necessário systemd 254 ou superior, sessão de usuário acessível e cgroups v2 com controle de CPU. Se o gerenciador ou a configuração falhar, o comando termina com erro, sem repetir a execução sem limite. A configuração vale para novas execuções, não modifica processos já em andamento.
 
-O build Next.js ocorre no servidor; essa quota cobre somente o trabalho **local**. Ela não limita carga de outros programas nem o build remoto. Chamar `python3 scripts/deploy.py` diretamente contorna o launcher e seu limite; use `~/bin/build-mestrefabio` nas operações normais.
+O build Next.js ocorre no servidor; essa quota cobre somente o trabalho **local**. Ela não limita carga de outros programas. Chamar `python3 scripts/deploy.py` diretamente contorna o launcher e seu limite; use `~/bin/build-mestrefabio` nas operações normais ou aplique um limite equivalente de CPU e memória ao chamar o script.
 
 Teste local com dois processos filhos e medição da quota real, sem rede nem deploy:
 
@@ -61,6 +61,12 @@ python3 tests/e2e_cpu_limit.py
 ```
 
 Validação em 8 de setembro de 2026: 54 testes passaram; no teste real, dois filhos compartilharam `cpu.max=50000 100000` e consumiram juntos 2,01 segundos de CPU em 4,03 segundos de execução.
+
+## Limite do build no servidor
+
+No servidor, `npm ci` e `npm run build` rodam dentro de um scope do systemd do usuário (`systemd-run --user --scope`) com `CPUQuota=100%` (um núcleo), `MemoryHigh=1G`, `MemoryMax=2G` e `nice 10`, para não disputar CPU e memória com as outras aplicações em produção. Os valores ficam em `NPM_LIMIT`, em [`../scripts/deploy_remote.py`](../scripts/deploy_remote.py). Se o `systemd-run` do usuário não estiver disponível, a instalação falha sem repetir a execução sem limite. Estourar `MemoryMax` interrompe o build e mantém a versão atual no ar.
+
+O host SSH `five` aponta para a mesma máquina que `two`. O checkout legado `/home/fabio/projetos/mestrefabio-portfolio` não existe mais nesse servidor; para copiar o `.env.local`, passe em `--legacy-dir` o caminho absoluto da release ativa, que guarda o arquivo com permissão `0600`.
 
 ## Publicar
 

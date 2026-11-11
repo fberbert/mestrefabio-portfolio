@@ -20,15 +20,24 @@ class DeployError(RuntimeError):
     pass
 
 
+# XDG_RUNTIME_DIR lets systemd-run reach the user manager; it holds no secrets.
 def clean_env():
     return {key: value for key, value in os.environ.items()
-            if key in {'PATH', 'HOME', 'USER', 'LOGNAME', 'LANG', 'LC_ALL', 'TMPDIR'}}
+            if key in {'PATH', 'HOME', 'USER', 'LOGNAME', 'LANG', 'LC_ALL', 'TMPDIR', 'XDG_RUNTIME_DIR'}}
+
+
+# npm ci and the Next.js build share the server with other production apps.
+# One scope caps their whole process tree at one core and throttles memory
+# before the hard limit, at low priority. There is no unlimited fallback.
+NPM_LIMIT = ['systemd-run', '--user', '--scope', '--quiet', '-p', 'CPUQuota=100%',
+             '-p', 'MemoryHigh=1G', '-p', 'MemoryMax=2G', 'nice', '-n', '10']
 
 
 def run(command, cwd=None):
-    result = subprocess.run(command, cwd=cwd, env=clean_env(), text=True,
+    npm = Path(command[0]).name == 'npm'
+    result = subprocess.run(NPM_LIMIT + command if npm else command, cwd=cwd, env=clean_env(), text=True,
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            timeout=1800 if Path(command[0]).name == 'npm' else 30)
+                            timeout=1800 if npm else 30)
     if result.returncode:
         raise DeployError('command failed: ' + Path(command[0]).name)
     return result.stdout.strip()
