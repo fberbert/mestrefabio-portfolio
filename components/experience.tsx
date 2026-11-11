@@ -2,72 +2,40 @@
 
 import React from "react";
 import SectionHeading from "./section-heading";
-import {
-  VerticalTimeline,
-  VerticalTimelineElement,
-} from "react-vertical-timeline-component";
-import "react-vertical-timeline-component/style.min.css";
+import Reveal from "./reveal";
 import { translations } from "@/lib/translations";
 import { useSectionInView } from "@/lib/hooks";
-import { useTheme } from "@/context/theme-context";
 import { useLang } from "@/context/language-context";
-
-type ExperiencesData = {
-  title: string;
-  location: string;
-  description: string;
-  icon: React.JSX.Element;
-  date: string;
-};
 
 export default function Experience() {
   const { t, lang } = useLang();
-  const { ref, inView } = useSectionInView("#experience", 0.2);
-  const { theme } = useTheme();
-
-  const experiencesData = translations[lang].experiencesData;
-
-  if (!experiencesData) return null;
+  const { ref } = useSectionInView("#experience", 0.1);
 
   return (
-    <section id="experience" ref={ref} className="scroll-mt-28 mb-28 sm:mb-40">
-      <SectionHeading>{t("section.experience")}</SectionHeading>
-      <VerticalTimeline lineColor="">
-        {Object.values(experiencesData).map((item: ExperiencesData, index: number) => (
-          <React.Fragment key={index}>
-            <VerticalTimelineElement
-              visible={inView}
-              contentStyle={{
-                background:
-                  theme === "light" ? "#f3f4f6" : "rgba(255, 255, 255, 0.05)",
-                boxShadow: "none",
-                border: "1px solid rgba(0, 0, 0, 0.05)",
-                textAlign: "left",
-                padding: "1.3rem 2rem",
-              }}
-              contentArrowStyle={{
-                borderRight:
-                  theme === "light"
-                    ? "0.4rem solid #9ca3af"
-                    : "0.4rem solid rgba(255, 255, 255, 0.5)",
-              }}
-              date={item.date}
-              icon={item.icon}
-              iconStyle={{
-                background:
-                  theme === "light" ? "white" : "rgba(255, 255, 255, 0.15)",
-                fontSize: "1.5rem",
-              }}
-            >
-              <h3 className="font-semibold capitalize">{item.title}</h3>
-              <p className="font-normal !mt-0">{item.location}</p>
-              <p className="!mt-1 !font-normal text-gray-700 dark:text-white/75">
-                {item.description}
-              </p>
-            </VerticalTimelineElement>
-          </React.Fragment>
+    <section
+      id="experience"
+      ref={ref}
+      className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24"
+    >
+      <SectionHeading index="03">{t("section.experience")}</SectionHeading>
+      <ol>
+        {translations[lang].experiencesData.map((item) => (
+          <li key={`${item.title}-${item.date}`}>
+            <Reveal className="grid gap-2 border-t border-line py-8 md:grid-cols-12 md:gap-8">
+              <p className="label pt-1 tabular-nums text-muted md:col-span-3">{item.date}</p>
+              <div className="md:col-span-9">
+                <h3 className="font-display text-xl font-bold tracking-tight [font-stretch:105%] sm:text-2xl">
+                  {item.title}
+                </h3>
+                <p className="mt-1 font-display text-sm font-medium text-accent-ink">
+                  {item.location}
+                </p>
+                <p className="mt-3 max-w-[70ch] leading-relaxed text-muted">{item.description}</p>
+              </div>
+            </Reveal>
+          </li>
         ))}
-      </VerticalTimeline>
+      </ol>
     </section>
   );
 }

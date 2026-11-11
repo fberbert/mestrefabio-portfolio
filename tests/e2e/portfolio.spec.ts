@@ -1,7 +1,7 @@
 import { test, expect, type Page } from '@playwright/test';
 
 const message = 'Browser integration test: contact delivery.';
-const success = 'Email sent successfully!';
+const success = 'Message sent. Thank you! I will reply to the email you provided.';
 const deliveryFailure = 'Unable to send your message. Please try again later.';
 
 async function fillContact(page: Page, email: string) {

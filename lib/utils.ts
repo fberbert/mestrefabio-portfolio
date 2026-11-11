@@ -1,3 +1,6 @@
+// Career started in 2000.
+export const yearsOfExperience = (): number => new Date().getFullYear() - 2000;
+
 export const validateString = (
   value: unknown,
   maxLength: number

@@ -6,7 +6,7 @@ describe("site metadata", () => {
   it("uses the correct portfolio title and current experience", () => {
     expect(metadata.title).toBe("Mestre Fábio | Personal Portfolio");
     expect(metadata.description).toBe(
-      `Fábio is a full-stack developer with ${new Date().getFullYear() - 2000} years of experience. Bring me your ideas and I'll bring them to life!`,
+      `Fábio is a senior full-stack developer focused on applied AI, Linux and AWS, with ${new Date().getFullYear() - 2000} years of experience. Bring me your ideas and I'll bring them to life!`,
     );
   });
 

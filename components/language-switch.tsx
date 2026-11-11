@@ -1,30 +1,19 @@
 "use client";
 
 import { useLang } from "@/context/language-context";
-import React from "react";
-// Importando os ícones das bandeiras
-import { US, BR } from 'country-flag-icons/react/3x2';
 
 export default function LangSwitch() {
-  const { lang, toggleLang } = useLang();
+  const { toggleLang, t } = useLang();
 
   return (
     <button
-      className="fixed top-[5px] sm:top-[12px] right-2 sm:right-5 sm:w-[30px] sm:h-[30px] w-[25px] h-[25px] bg-opacity-0 no-border flex items-center justify-center p-0 overflow-hidden brightness-90 hover:brightness-110 active:brightness-90 active:scale-105 transition-all rounded-lg"
+      type="button"
       onClick={toggleLang}
-      aria-label="Toggle language"
+      aria-label={t("menu.langLabel")}
+      title={t("menu.langLabel")}
+      className="label grid h-11 min-w-[2.75rem] place-items-center rounded-sm border border-line px-2 text-ink transition-colors hover:border-ink"
     >
-      {lang === "en" ? (
-        <US
-          title="Mudar para Português"
-          className="object-cover"
-        />
-      ) : (
-        <BR
-          title="Switch to English"
-          className="object-cover"
-        />
-      )}
+      {t("menu.langShort")}
     </button>
   );
 }

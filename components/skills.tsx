@@ -2,56 +2,41 @@
 
 import React from "react";
 import SectionHeading from "./section-heading";
+import Reveal from "./reveal";
 import { useSectionInView } from "@/lib/hooks";
-import { motion } from "framer-motion";
 import { useLang } from "@/context/language-context";
 import { translations } from "@/lib/translations";
-
-const fadeInAnimationVariants = {
-  initial: {
-    opacity: 0,
-    y: 100,
-  },
-  animate: (index: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: 0.05 * index,
-    },
-  }),
-};
 
 export default function Skills() {
   const { t, lang } = useLang();
   const { ref } = useSectionInView("#skills", 0.2);
 
-  const skillsData = translations[lang].skills;
-  if (!skillsData) return null;
-
   return (
     <section
       id="skills"
       ref={ref}
-      className="mb-28 max-w-[53rem] scroll-mt-28 text-center sm:mb-40"
+      className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24"
     >
-      <SectionHeading>{t("section.skills")}</SectionHeading>
-      <ul className="flex flex-wrap justify-center gap-2 text-lg text-gray-800">
-        {skillsData.map((skill, index) => (
-          <motion.li
-            className="bg-white borderBlack rounded-xl px-5 py-3 dark:bg-white/10 dark:text-white/80"
-            key={index}
-            variants={fadeInAnimationVariants}
-            initial="initial"
-            whileInView="animate"
-            viewport={{
-              once: false,
-            }}
-            custom={index}
-          >
-            {skill}
-          </motion.li>
+      <SectionHeading index="04">{t("section.skills")}</SectionHeading>
+      <div className="grid gap-12 md:grid-cols-3 md:gap-10">
+        {translations[lang].skills.map((group, index) => (
+          <Reveal key={group.title} delay={index * 0.08}>
+            <h3 className="border-t border-ink pt-3 font-display text-xl font-bold tracking-tight [font-stretch:108%]">
+              {group.title}
+            </h3>
+            <ul className="mt-5 flex flex-wrap gap-2">
+              {group.items.map((skill) => (
+                <li
+                  key={skill}
+                  className="rounded-sm border border-line px-2.5 py-1 font-display text-sm"
+                >
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         ))}
-      </ul>
+      </div>
     </section>
   );
 }

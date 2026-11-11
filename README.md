@@ -2,20 +2,19 @@
 
 ## About
 
-This portfolio website is built with cutting-edge technologies, including:
-- The latest features of Next.js 14
-- Next.js App Router and Server Actions
+This portfolio website is built with:
+- Next.js 15 App Router and Server Actions
 - A mix of Client and Server Components
-- TypeScript for both beginners and intermediate developers
-- Styling with Tailwind CSS
-- State management using Context API
-- Advanced animations powered by Framer Motion
-- Dynamic typing effects with Typed.js
-- Email functionality through React.Email & Resend
-- Custom React hooks for enhanced functionality
-- A fresh and modern UI design
-- Support for Light & Dark modes
-- Fully responsive design for all devices
+- TypeScript
+- Tailwind CSS with OKLCH design tokens (light and dark themes) in `app/globals.css`
+- Archivo (display) and Literata (text) through `next/font`
+- State management using Context API (language, theme, active section)
+- Framer Motion reveals that respect the visitor's reduced-motion setting
+- Email functionality through React Email & Resend
+- Bilingual content (English and Brazilian Portuguese) in `lib/translations.ts`
+- Responsive layout with a compact mobile menu
+
+Design context and principles live in `.impeccable.md`.
 
 You are welcome to clone, copy, and use this code for your projects.
 

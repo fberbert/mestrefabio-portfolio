@@ -2,7 +2,7 @@
 
 import React from "react";
 import SectionHeading from "./section-heading";
-import { motion } from "framer-motion";
+import Reveal from "./reveal";
 import { useSectionInView } from "@/lib/hooks";
 import ContactForm from "./contact-form";
 import SocialMediaBar from "./social-media-bar";
@@ -10,40 +10,35 @@ import { useLang } from "@/context/language-context";
 
 export default function Contact() {
   const { t } = useLang();
-  const { ref } = useSectionInView("#contact");
+  const { ref } = useSectionInView("#contact", 0.3);
 
   return (
-    <motion.section
+    <section
       id="contact"
       ref={ref}
-      className="mb-20 sm:mb-28 w-[min(100%,38rem)] text-center"
-      initial={{
-        opacity: 0,
-      }}
-      whileInView={{
-        opacity: 1,
-      }}
-      transition={{
-        duration: 1,
-      }}
-      viewport={{
-        once: false,
-      }}
+      className="mx-auto w-full max-w-6xl px-5 py-16 sm:px-8 sm:py-24"
     >
-      <SectionHeading>{t("section.contact")}</SectionHeading>
+      <SectionHeading index="05">{t("section.contact")}</SectionHeading>
 
-      <p
-        className="text-gray-700 -mt-6 dark:text-white/80"
-        dangerouslySetInnerHTML={{ __html: t("contact.description") }}
-      />
+      {/* Mobile order: intro, form, social links. Desktop: form spans the right column. */}
+      <div className="grid gap-12 lg:grid-cols-12 lg:gap-x-12">
+        <Reveal className="lg:col-span-5">
+          <p
+            className="text-xl leading-relaxed sm:text-2xl"
+            dangerouslySetInnerHTML={{ __html: t("contact.description") }}
+          />
+          <p className="mt-4 leading-relaxed text-muted">{t("contact.guidance")}</p>
+        </Reveal>
 
-      <ContactForm />
+        <Reveal className="lg:col-span-7 lg:row-span-2" delay={0.1}>
+          <ContactForm />
+        </Reveal>
 
-      <p className="text-gray-700 dark:text-white/80 mt-4">
-        {t("contact.footer")}
-      </p>
-
-      <SocialMediaBar />
-    </motion.section>
+        <Reveal className="lg:col-span-5">
+          <h3 className="label text-muted">{t("contact.footer")}</h3>
+          <SocialMediaBar />
+        </Reveal>
+      </div>
+    </section>
   );
 }

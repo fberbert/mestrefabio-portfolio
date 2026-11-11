@@ -1,50 +1,59 @@
 // layout.tsx
 import Header from "@/components/header";
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { Archivo, Literata } from "next/font/google";
 import ActiveSectionContextProvider from "@/context/active-section-context";
-import BackgroundVideo from "@/components/background-video";
 import Footer from "@/components/footer";
+import MotionProvider from "@/components/motion-provider";
+import SkipLink from "@/components/skip-link";
 import ScrollToTop from "@/components/scroll-to-top";
-import ThemeSwitch from "@/components/theme-switch";
 import ThemeContextProvider from "@/context/theme-context";
 import LanguageContextProvider from "@/context/language-context";
-import { Toaster } from "react-hot-toast";
 
-const inter = Inter({ subsets: ["latin"] });
+const display = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-display",
+  display: "swap",
+});
+
+const body = Literata({
+  subsets: ["latin"],
+  axes: ["opsz"],
+  variable: "--font-body",
+  display: "swap",
+});
 
 export { metadata } from "@/lib/site-metadata";
+
+// Applies the saved or preferred theme before first paint to avoid a flash.
+const themeScript = `try{var t=localStorage.getItem("theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme: dark)").matches))document.documentElement.classList.add("dark")}catch(e){}`;
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // original: #fbe2e3 | #946263 | #dbd7fb | #676394
-  // new bases: #1B1A55 | #070F2B | #9290C3 | #535C91
-  //
-
   return (
-    <html lang="en" className="!scroll-smooth">
-      <body
-        className={`${inter.className} bg-gray-50 text-gray-950 relative pt-28 sm:pt-36 dark:bg-gray-900 dark:text-gray-50 dark:text-opacity-90`}
-      >
-        <div className="bg-[#1B1A55] absolute top-[-6rem] -z-10 right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] dark:bg-[#070F2B]"></div>
-        <div className="bg-[#9290C3] absolute top-[-1rem] -z-10 left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] dark:bg-[#535C91]"></div>
-
+    <html
+      lang="en"
+      className={`${display.variable} ${body.variable}`}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
+      <body>
         <ThemeContextProvider>
           <LanguageContextProvider>
             <ActiveSectionContextProvider>
-              <BackgroundVideo />
-              <Header />
-              {children}
-              <Footer />
-
-              <Toaster position="top-right" />
-              <div className="fixed bottom-5 right-5 flex space-y-2 flex-col sm:flex-col">
+              <MotionProvider>
+                <SkipLink />
+                <Header />
+                {children}
+                <Footer />
                 <ScrollToTop />
-                <ThemeSwitch />
-              </div>
+              </MotionProvider>
             </ActiveSectionContextProvider>
           </LanguageContextProvider>
         </ThemeContextProvider>

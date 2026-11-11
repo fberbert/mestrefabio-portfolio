@@ -1,124 +1,116 @@
 // project.tsx
 "use client";
 
-import { useRef, useState } from "react";
-import Image, { StaticImageData } from "next/image";
-import { motion, useScroll, useTransform } from "framer-motion";
-import React from "react";
+import clsx from "clsx";
+import { FiArrowUpRight } from "react-icons/fi";
 import { useLang } from "@/context/language-context";
-import VideoOfProject from "./video-of-project";
+import type { ProjectData } from "@/lib/translations";
+import ProjectMedia from "./project-media";
+import Reveal from "./reveal";
 
-type ProjectData = {
-  title: string;
-  description: string;
-  tags: string[];
-  imageUrl?: StaticImageData;
-  video?: string;
-  url?: string;
+type ProjectProps = ProjectData & {
+  index: number;
+  reversed?: boolean;
 };
 
+function Tags({ tags }: { tags: string[] }) {
+  return (
+    <ul className="mt-6 flex flex-wrap gap-2">
+      {tags.map((tag) => (
+        <li key={tag} className="label rounded-sm border border-line px-2 py-1 text-[0.7rem] text-muted">
+          {tag}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function VisitLink({ url, title }: { url?: string; title: string }) {
+  const { t } = useLang();
+  if (!url) return null;
+
+  return (
+    <a
+      href={url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="link mt-6 inline-flex items-center gap-1 font-display text-sm font-semibold uppercase tracking-[0.08em]"
+    >
+      {t("project.visitProject")}
+      <span className="sr-only">: {title}</span>
+      <FiArrowUpRight aria-hidden="true" />
+    </a>
+  );
+}
+
 export default function Project({
+  index,
+  reversed = false,
   title,
+  tagline,
   description,
+  details,
   tags,
   imageUrl,
   video,
   url,
-}: ProjectData) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["0 1", "1.33 1"],
-  });
-  const scaleProgress = useTransform(scrollYProgress, [0, 1], [0.8, 1]);
-  const opacityProgress = useTransform(scrollYProgress, [0, 1], [0.6, 1]);
-
-  const [isVideoExpanded, setIsVideoExpanded] = useState(false);
+  featured,
+}: ProjectProps) {
   const { t } = useLang();
+  const number = String(index + 1).padStart(2, "0");
+
+  if (featured) {
+    return (
+      <Reveal>
+        <article className="grid gap-8 border-t border-line py-12 lg:grid-cols-12 lg:gap-12 lg:py-16">
+          <ProjectMedia
+            title={title}
+            imageUrl={imageUrl}
+            video={video}
+            sizes="(min-width: 1024px) 680px, 100vw"
+            className={clsx("lg:col-span-7", reversed && "lg:order-2")}
+          />
+          <div className="lg:col-span-5">
+            <p className="label text-accent-ink">
+              {t("project.featured")}
+            </p>
+            <h3 className="mt-3 font-display text-4xl font-extrabold tracking-tight [font-stretch:110%] sm:text-5xl">
+              {title}
+            </h3>
+            <p className="mt-5 text-lg leading-relaxed">{description}</p>
+            {details && <p className="mt-4 leading-relaxed text-muted">{details}</p>}
+            <Tags tags={tags} />
+            <VisitLink url={url} title={title} />
+          </div>
+        </article>
+      </Reveal>
+    );
+  }
 
   return (
-    <motion.div
-      ref={ref}
-      style={{
-        scale: scaleProgress,
-        opacity: opacityProgress,
-      }}
-      className="group mb-3 sm:mb-8 last:mb-0"
-    >
-      <section className="bg-white max-w-[42rem] border border-black/5 rounded-lg overflow-hidden relative hover:bg-gray-100 transition dark:text-white dark:bg-white/10 dark:hover:bg-white/20">
-        {/* Container Flex */}
-        <div
-          className={`flex flex-col sm:flex-row ${video ? "sm:min-h-[33rem]" : ""}`}
-        >
-          {/* Conteúdo */}
-          <div className="pt-4 pb-0 px-5 sm:pl-10 sm:pr-5 sm:pt-10 flex flex-col sm:w-1/2">
-            <h3 className="text-2xl font-semibold">{title}</h3>
-            <p className="mt-2 mb-4 leading-relaxed text-black dark:text-white/70">
-              {description}
-            </p>
-            <ul className="flex flex-wrap mt-4 gap-2">
-              {tags.map((tag: string, index: number) => (
-                <li
-                  className="bg-black/[0.9] px-3 py-1 text-[0.7rem] uppercase tracking-wider text-white rounded-full dark:text-white/70"
-                  key={index}
-                >
-                  {tag}
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-row text-center p-4 mt-4 mb-1 justify-center gap-3">
-              <a
-                href={url}
-                className="text-sm font-semibold hover:no-underline dark:bg-blue-900 px-4 py-2 rounded-md dark:text-blue-100 dark:hover:bg-blue-800 transition text-black"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {t("project.visitProject")}
-              </a>
-              {/* Botão "Expand Video" e vídeo para dispositivos móveis */}
-              {video && (
-                <div className="sm:hidden text-center">
-                  <button
-                    onClick={() => setIsVideoExpanded(!isVideoExpanded)}
-                    className="text-sm font-semibold hover:no-underline dark:bg-blue-900 px-4 py-2 rounded-md dark:text-blue-100 dark:hover:bg-blue-800 transition text-black"
-                  >
-                    {isVideoExpanded
-                      ? t("project.hideVideo")
-                      : t("project.expandVideo")}
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Vídeo/Imagem */}
-          <div className="sm:w-1/2 flex items-center justify-center sm:p-4">
-            {video ? (
-              <>
-                {/* Vídeo para telas grandes */}
-                <div className="hidden sm:block w-full">
-                  <VideoOfProject src={video} />
-                </div>
-                {isVideoExpanded && (
-                  <div className="mt-0">
-                    <VideoOfProject src={video} />
-                  </div>
-                )}
-              </>
-            ) : imageUrl ? (
-              // Renderizar imagem se não houver VideoComponent
-              <div className="hidden sm:block w-full">
-                <Image
-                  src={imageUrl}
-                  alt={`Imagem do projeto ${title}`}
-                  quality={95}
-                  className="absolute hidden sm:block top-8 -right-40 w-[28.25rem] rounded-t-lg shadow-2xl transition group-hover:scale-[1.04] group-hover:-translate-x-3 group-hover:translate-y-3 group-hover:-rotate-2"
-                />
-              </div>
-            ) : null}
-          </div>
+    <Reveal>
+      <article className="grid gap-6 border-t border-line py-10 md:grid-cols-12 md:gap-8">
+        <p className="label hidden text-accent-ink md:col-span-1 md:block">{number}</p>
+        <ProjectMedia
+          title={title}
+          imageUrl={imageUrl}
+          video={video}
+          sizes="(min-width: 768px) 360px, 100vw"
+          className="md:col-span-4"
+        />
+        <div className="md:col-span-7">
+          <h3 className="font-display text-2xl font-bold tracking-tight [font-stretch:108%] sm:text-3xl">
+            {title}
+          </h3>
+          <p className="label mt-2 text-muted">
+            <span className="text-accent-ink md:hidden">{number} · </span>
+            {tagline}
+          </p>
+          <p className="mt-4 max-w-[65ch] leading-relaxed">{description}</p>
+          <Tags tags={tags} />
+          <VisitLink url={url} title={title} />
         </div>
-      </section>
-    </motion.div>
+      </article>
+    </Reveal>
   );
 }

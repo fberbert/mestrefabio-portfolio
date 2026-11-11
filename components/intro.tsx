@@ -1,82 +1,99 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import React from "react";
+import { FiArrowDown, FiArrowUpRight } from "react-icons/fi";
 import { useSectionInView } from "@/lib/hooks";
-import Typed from "typed.js";
 import { useLang } from "@/context/language-context";
+import { translations } from "@/lib/translations";
+import { yearsOfExperience } from "@/lib/utils";
+import Reveal from "./reveal";
 
 export default function Intro() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { ref } = useSectionInView("#home", 0.5);
-  const typedRef = useRef<HTMLSpanElement>(null);
 
-  useEffect(() => {
-    const yearsOfExperience = new Date().getFullYear() - 2000;
-    const typed = new Typed(typedRef.current!, {
-      strings: t(`intro.typed`).replace("{{YEARS}}", yearsOfExperience.toString()).split("\n"),
-      typeSpeed: 50,
-      backSpeed: 25,
-      backDelay: 5000,
-      loop: true,
-    });
-
-    return () => {
-      typed.destroy();
-    };
-  }, [t]);
+  // The hero ledger lists the first live products, in the same order as the Projects section.
+  const live = Object.values(translations[lang].projectsData)
+    .filter((project) => project.visible && project.url)
+    .slice(0, 6);
 
   return (
     <section
       ref={ref}
       id="home"
-      className="mb-4 max-w-[50rem] text-center sm:mb-0 scroll-mt-[100rem]"
+      className="mx-auto grid w-full max-w-6xl gap-14 px-5 pb-20 pt-28 sm:px-8 sm:pb-28 sm:pt-32 lg:grid-cols-12 lg:gap-10"
     >
-      <div className="flex items-center justify-center">
-        <div className="relative">
-          <motion.div
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              type: "tween",
-              duration: 0.2,
-            }}
-          >
-            <Image
-              src="/img/profile-picture3.jpg"
-              alt="Fábio portrait"
-              width="192"
-              height="192"
-              quality="95"
-              priority={true}
-              className="h-24 w-24 rounded-full object-cover border-[0.35rem] border-white shadow-xl"
-            />
-          </motion.div>
+      <Reveal className="lg:col-span-8">
+        <h1 className="font-display text-[clamp(2.5rem,5.4vw,4.6rem)] font-extrabold leading-[0.98] tracking-tight [font-stretch:110%]">
+          {t("intro.title")}
+        </h1>
 
-          <motion.span
-            className="absolute bottom-0 right-[-25px] text-2xl"
-            initial={{ opacity: 0, scale: 0 }}
-            animate={{ opacity: 1, scale: 1, scaleX: -1 }}
-            transition={{
-              type: "spring",
-              stiffness: 125,
-              delay: 0.1,
-              duration: 0.7,
-            }}
-          >
-            👋
-          </motion.span>
+        <div className="mt-10 flex items-start gap-5">
+          <Image
+            src="/img/profile-picture3.jpg"
+            alt={t("intro.portraitAlt")}
+            width="144"
+            height="144"
+            quality="90"
+            priority={true}
+            className="h-16 w-16 shrink-0 rounded-sm object-cover sm:h-[4.5rem] sm:w-[4.5rem]"
+          />
+          <div>
+            <p className="font-display text-lg font-semibold">
+              {t("intro.name")}
+              <a
+                href="#mestre"
+                className="ml-0.5 text-accent-ink hover:underline"
+                aria-label={t("intro.footnote")}
+                title={t("intro.footnote")}
+              >
+                *
+              </a>
+            </p>
+            <p className="mt-2 max-w-[58ch] text-lg leading-relaxed text-muted">
+              {t("intro.subtitle").replace("{{YEARS}}", yearsOfExperience().toString())}
+            </p>
+          </div>
         </div>
-      </div>
 
-      <motion.h1
-        className="mb-10 mt-4 px-4 text-2xl font-medium !leading-[1.5] sm:text-4xl min-h-[196px]"
-        initial={{ opacity: 0, y: 100 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <span ref={typedRef}></span>
-      </motion.h1>
+        <div className="mt-10 flex flex-wrap gap-3">
+          <a href={t("intro.cvUrl")} download className="btn-primary">
+            {t("intro.downloadCv")}
+            <FiArrowDown aria-hidden="true" />
+          </a>
+          <a href="#contact" className="btn-secondary">
+            {t("intro.contactCta")}
+          </a>
+        </div>
+      </Reveal>
+
+      <Reveal className="self-end lg:col-span-4" delay={0.15}>
+        <h2 className="label text-muted">{t("intro.liveTitle")}</h2>
+        <ul className="mt-3 border-b border-line">
+          {live.map((project) => (
+            <li key={project.title} className="border-t border-line">
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-baseline justify-between gap-4 py-3"
+              >
+                <span>
+                  <span className="font-display font-semibold group-hover:text-accent-ink">
+                    {project.title}
+                  </span>
+                  <span className="block text-sm text-muted">{project.tagline}</span>
+                </span>
+                <FiArrowUpRight
+                  aria-hidden="true"
+                  className="shrink-0 text-muted transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent-ink"
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
     </section>
   );
 }

@@ -2,15 +2,94 @@
 @tailwind components;
 @tailwind utilities;
 
-html {
-  --line-color: #e5e7eb;
+/*
+ * Design tokens. Values are OKLCH channels ("L C H") so Tailwind can add
+ * alpha: oklch(var(--ink) / <alpha-value>). Neutrals are tinted toward the
+ * brand hue (Tux orange, ~55).
+ */
+:root {
+  --paper: 0.975 0.004 70;
+  --surface: 0.945 0.009 70;
+  --ink: 0.22 0.02 55;
+  --muted: 0.43 0.02 55;
+  --line: 0.86 0.016 70;
+  --accent: 0.56 0.18 42;
+  --accent-ink: 0.5 0.165 42;
+  --error: 0.5 0.19 27;
+  --accent-fg: 0.985 0.006 75;
+  color-scheme: light;
 }
 
 html.dark {
-  --line-color: rgba(255, 255, 255, 0.2);
+  --paper: 0.185 0.012 55;
+  --surface: 0.225 0.014 55;
+  --ink: 0.93 0.012 75;
+  --muted: 0.75 0.016 70;
+  --line: 0.33 0.016 55;
+  --accent: 0.74 0.155 55;
+  --accent-ink: 0.79 0.135 60;
+  --error: 0.74 0.15 27;
+  --accent-fg: 0.2 0.02 55;
+  color-scheme: dark;
 }
 
-.borderBlack {
-  @apply border border-black/10;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 4rem;
+  }
+
+  body {
+    @apply bg-paper text-ink font-body antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p,
+  li {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: oklch(var(--accent) / 0.25);
+  }
+
+  :focus-visible {
+    outline: 2px solid oklch(var(--accent-ink));
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
 }
 
+@layer components {
+  /* Small uppercase label used for eyebrows, tags and metadata. */
+  .label {
+    @apply font-display text-xs font-semibold uppercase tracking-[0.14em];
+  }
+
+  .link {
+    @apply underline decoration-accent/60 decoration-2 underline-offset-4 transition-colors hover:text-accent-ink hover:decoration-accent;
+  }
+
+  .btn {
+    @apply inline-flex min-h-[2.75rem] items-center justify-center gap-2 rounded-sm px-5 font-display text-sm font-semibold uppercase tracking-[0.08em] transition-colors;
+  }
+
+  .btn-primary {
+    @apply btn bg-accent text-accent-fg hover:bg-accent-ink;
+  }
+
+  .btn-secondary {
+    @apply btn border border-ink/25 text-ink hover:border-ink;
+  }
+}

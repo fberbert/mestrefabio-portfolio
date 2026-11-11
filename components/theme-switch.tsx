@@ -1,23 +1,23 @@
 "use client";
 
 import { useTheme } from "@/context/theme-context";
-import React from "react";
+import { useLang } from "@/context/language-context";
 import { BsMoon, BsSun } from "react-icons/bs";
 
 export default function ThemeSwitch() {
   const { theme, toggleTheme } = useTheme();
+  const { t } = useLang();
+  const label = theme === "light" ? t("menu.themeToDark") : t("menu.themeToLight");
 
   return (
     <button
-      className="bg-white w-[2.2rem] h-[2.2rem] sm:w-[3rem] sm:h-[3rem] bg-opacity-80 backdrop-blur-[0.5rem] no-border border-white border-opacity-40 shadow-2xl rounded-full flex items-center justify-center sm:hover:scale-[1.15] transition-all dark:bg-gray-950"
+      type="button"
       onClick={toggleTheme}
-      aria-label="Toggle theme"
+      aria-label={label}
+      title={label}
+      className="grid h-11 w-11 place-items-center rounded-sm border border-line text-ink transition-colors hover:border-ink"
     >
-      {theme === "light" ? (
-        <BsSun title="Switch to dark theme" />
-      ) : (
-        <BsMoon title="Switch to light theme" />
-      )}
+      {theme === "light" ? <BsMoon aria-hidden="true" /> : <BsSun aria-hidden="true" />}
     </button>
   );
 }

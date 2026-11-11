@@ -3,8 +3,6 @@ import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-libra
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import ContactForm from '@/components/contact-form';
 import type { ContactResult } from '@/lib/contact/types';
-const { success, error } = vi.hoisted(() => ({ success: vi.fn(), error: vi.fn() }));
-vi.mock('react-hot-toast', () => ({ default: { success, error } }));
 vi.mock('@/actions/sendEmail', () => ({ sendEmail: vi.fn() }));
 vi.mock('@/context/language-context', () => ({ useLang: () => ({ t: (key: string) => key }) }));
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
@@ -24,7 +22,7 @@ describe('contact form', () => {
     await waitFor(() => expect((screen.getByLabelText('contact.email') as HTMLInputElement).value).toBe(''));
     expect((screen.getByLabelText('contact.message') as HTMLTextAreaElement).value).toBe('');
     expect((screen.getByLabelText('unrelated') as HTMLInputElement).value).toBe('keep');
-    expect(success).toHaveBeenCalledWith('contact.success');
+    expect(screen.getByRole('status').textContent).toBe('contact.success');
     expect((screen.getByRole('button') as HTMLButtonElement).disabled).toBe(false);
   });
   it.each(['delivery', 'validation', 'rate_limit', 'reject'])('preserves values and shows safe error for %s', async code => {
@@ -33,9 +31,9 @@ describe('contact form', () => {
       return { success: false, code: code as 'delivery' | 'validation' | 'rate_limit' };
     });
     render(<ContactForm action={action} />); fill();
-    await waitFor(() => expect(error).toHaveBeenCalledWith(`contact.${code === 'reject' ? 'delivery' : code}`));
+    await waitFor(() => expect(screen.getByRole('status').textContent).toBe(`contact.${code === 'reject' ? 'delivery' : code}`));
     expect((screen.getByLabelText('contact.email') as HTMLInputElement).value).toBe('person@example.com');
     expect((screen.getByLabelText('contact.message') as HTMLTextAreaElement).value).toBe('Hello');
-    expect(success).not.toHaveBeenCalled();
+    expect(screen.queryByText('SECRET')).toBeNull();
   });
 });

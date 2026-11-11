@@ -62,6 +62,10 @@ export default function LangContextProvider({
     }
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   return (
     <LangContext.Provider
       value={{
